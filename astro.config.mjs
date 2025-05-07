@@ -6,6 +6,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://dgilleland.github.io',
+  base: 'DMIT-2008',
   integrations: [
       starlight({
           title: 'My Docs',
