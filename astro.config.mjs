@@ -9,6 +9,10 @@ export default defineConfig({
   integrations: [
       starlight({
           title: 'My Docs',
+          customCss: [
+            // Path to your Tailwind base styles:
+            './src/styles/global.css',
+          ],
           social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
           sidebar: [
               {
