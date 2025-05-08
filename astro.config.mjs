@@ -10,7 +10,7 @@ export default defineConfig({
   base: '/DMIT-2008',
   integrations: [
       starlight({
-          title: 'My Docs',
+          title: "Dan's Docs",
           customCss: [
             // Path to your Tailwind base styles:
             './src/styles/global.css',
@@ -25,7 +25,7 @@ export default defineConfig({
                   label: 'Grokking',
                   items: [
                       // Each item here is one entry in the navigation menu.
-                      { label: 'Example Guide', slug: 'grok/all' },
+                      { label: 'Learn to Teach', slug: 'grok/all' },
                   ],
               },
               {

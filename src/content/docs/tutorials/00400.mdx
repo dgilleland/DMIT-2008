@@ -1,0 +1,211 @@
+---
+title: JavaScript Review - ES6 Essentials
+description: SUMMARY
+sidebar:
+  label: JS Review - Day 4
+draft: true
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
+
+<Image src={todo} alt="Author TODO Items" class="float-end ml-3" width="150" />
+<Aside title="Work-In-Progress (WIP)" type="caution">
+*See [issue 1](https://github.com/dgilleland/CPSC-1520/issues/1).*
+</Aside>
+
+# Targeted ES6 Examples
+
+🎉 Perform these using `node --watch sample.js` instead of full-blown web apps
+
+Use this order:
+
+1. [es6-block-scope](#es6-block-scope)
+1. [es6-template-literals](#es6-template-literals)
+1. [es6-functions-destructuring](#es6-functions-destructuring)
+1. [es6-promises](#es6-promises)
+1. [es6-promises-adv](#es6-promises-adv)
+1. [es6-fetch](#es6-fetch)
+1. [es6-fetch-adv](#es6-fetch-adv)
+
+----
+
+### es6-block-scope
+
+Key takeaways:
+
+- Prefer `let` over `var`
+- Don't pollute the Global Namespace
+  - Use JavaScript modules - `<script type="module" src="..."></script>`
+  - Don't use IIFEs (Immediately Invoked Function Expression)
+  - Don't assign variables to the global object (e.g.: `window`)
+- `const` protects the *variable* from changing, but if the variable is an object, that object's properties are still mutable
+
+### es6-template-literals
+
+Key takeaways:
+
+- Placeholders
+- Multi-line strings
+
+
+### es6-functions-destructuring
+
+Key takeaways:
+
+- Functions
+  - Function declaration vs. function expression
+  - Anonymous functions vs. named functions
+    - variable "hoisting" for named functions
+  - Object parameters (`function({name, age})` - an anonymous parameter - over `function(name, age)`) protect mistakes from order of arguments not matching order of parameters
+  - Default parameters - primitives and objects (e.g.: an `options = {size:10}` parameter)
+  - Functions as objects/parameters
+  - Returning a function from a function    
+  - Arrow function syntax
+  - 🎉 Using `console.assert()` for validating parameters - a *fallback debugging* technique - by asserting something about the data type (`typeof` or `instanceof` for classes) or the acceptable values of the variables
+- Variable declarations/initializations
+  - `let` - Multiple variables per line (comma-separated)
+  - Destructuring syntax
+    - for Objects
+    - for Arrays
+
+
+### es6-promises
+
+> What's the difference between a thousand, a million, and a billion? ([Calculator](https://www.calculateme.com/time/))
+>
+> - `1_000` seconds is 16.666... **Minutes**
+> - `1_000_000` seconds is 11.574074 **Days**
+> - `1_000_000_000` seconds is 31.688739 **Years**
+
+Key takeaways:
+
+- A `Promise<T>` object is like a "placeholder" for an expected value that will be returned in some unkown time in the future (it might be nano-seconds or minutes).
+- The `Promise()` constructor takes two parameters: `resolve` and `reject`
+  - [ ] Take some time to grok `Promise.resolve()` and `Promise.reject()` - see the [advanced fetch](#es6-fetch-adv) below
+- Although *asynchronous* in nature, it must be remembered that JavaScript is **single-threaded**, so unless the promise is related to something outside of JavaScript (e.g. - a network call like the `fetch()` API or a *service worker*), it will still be a blocking operation, though not in the way you would normally think.
+- When a function returns a `Promise<T>`, it's automatically an *asynchronous* function - no need to add the `async` keyword
+- When using `async`/`await`, the `await` is purposely turning the asynchronous operation into a synchronous operation
+  - Be thoughtful about using async/await - most of the time, you will **not** need to create async functions
+  - If you want to use the `await` within a function, then that function must be an `async` function.
+  - I personally prefer to use the `.then()`/`.catch()` of promises, rather than `await`. It's "cleaner", though you must keep in mind the "future" nature of the promise.
+
+```js
+let wait = ms => new Promise(resolve => setTimeout(res, ms)); // reject not needed, cuz setTimeout doesn't really fail
+// Now you can wait without passing a callback... kinda
+wait(3000).then(() => console.log('Waited three seconds.'));
+```
+
+### es6-promises-adv
+
+Key takeaways:
+
+- Reflecting on the "old days" of `XMLHttpRequest` - before the `fetch()` API
+  - This object is *not* available in the Node engine, but is available in the browser
+
+```js
+/**
+ * Send an AJAX request and return the result parsed as a JSON object
+ * @param {string} url - The URL for the desired resource.
+ * @returns {Promise} Promise represents the parsed JSON  
+ */
+const fetchJSON = (url) => {
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', (evt) => {
+            switch (xhr.status) {
+                case 200:
+                    try {
+                        resolve(JSON.parse(xhr.response));
+                    } catch (err) {
+                        let e = new Error(`Could not parse result: ${err}.`);
+                        reject(e);
+                    }
+                    break;
+                default:
+                    reject(`Error retrieving user data: ${xhr.status} - ${xhr.statusText}.`);
+            }
+        });
+        xhr.addEventListener('error', (evt) => {
+            reject('Error retrieving user data.');
+        });
+
+        xhr.open('get', url);
+
+        xhr.send(null);
+    });
+
+};
+
+// Now we can use the fetchJSON() to fetch any JSON we like, and since it's a Promise, we can
+// chain the calls together via next().
+document.querySelector('.btn-primary').addEventListener('click', () => {
+    fetchJSON('user.json')
+    .then(user => { document.querySelector('.user').innerHTML = `User: ${user.name}`; })
+    .then(() => fetchJSON('friends.json'))
+    .then(friends => {document.querySelector('.friends').innerHTML = `#Friends: ${friends.length}`})
+    .then(() => fetchJSON('posts.json'))
+    .then(posts => {document.querySelector('.posts').innerHTML = `First Post: ${posts[0].title}`})
+    .catch(err => {
+        document.querySelector('.output').innerHTML = err;
+    });
+});
+```
+
+
+### es6-fetch
+
+Key takeaways:
+
+- The `resp.ok` should be checked to see if it was a "valid" response
+  - What happens for the following server responses?
+    - 300
+    - 400
+    - 500
+- You *really* should always have a `.catch()` block! Also, after the first `.then()`, you can make use of `console.assert()`
+- `fetch()` is not just for JSON; it can be used for
+  - HTML "fragments" (think a navigation "component")
+  - Markdown files, which can then be rendered to HTML with the `markdown-it` package
+
+### es6-fetch-adv
+
+Key takeaways:
+
+- You can create an "all-purpose" function to fetch expecting a JSON result. Notice how it combines the notions of Promises
+
+```js
+/**
+ * Fetch and return the result parsed as a JSON object
+ * @param {string} url - The URL for the desired resource.
+ * @returns {Promise} Promise represents the parsed JSON  
+ */
+const fetchJSON = (url) => {
+    return fetch(url)
+    .then(response => {
+        if (response.ok) {
+            return Promise.resolve(response.json());
+        } else {
+            return Promise.reject(`Request for ${url} failed.`);
+        }
+    })
+    .catch(err => Promise.reject(err));
+};
+
+// Now we can use the fetchJSON() to fetch any JSON we like, and since it's a Promise, we can
+// chain the calls together via next().
+document.querySelector('.btn-primary').addEventListener('click', () => {
+    fetchJSON('user.json')
+    .then(user => { document.querySelector('.user').innerHTML = `User: ${user.name}`; })
+    .then(() => fetchJSON('friends.json'))
+    .then(() => fetchJSON('friends.json'))
+    .then(friends => {document.querySelector('.friends').innerHTML = `#Friends: ${friends.length}`})
+    .then(() => fetchJSON('posts.json'))
+    .then(posts => {document.querySelector('.posts').innerHTML = `First Post: ${posts[0].title}`})
+    .catch(err => {
+        document.querySelector('.output').innerHTML = err;
+    });
+});
+```
+
+

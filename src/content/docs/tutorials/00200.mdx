@@ -1,0 +1,126 @@
+---
+title: JavaScript Review - Node, ES6, and (Fetch) Promises
+description: SUMMARY
+sidebar:
+  label: JS Review - Day 2
+draft: true
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
+
+<Image src={todo} alt="Author TODO Items" class="float-end ml-3" width="150" />
+<Aside title="Work-In-Progress (WIP)" type="caution">
+*See [issue 1](https://github.com/dgilleland/CPSC-1520/issues/1).*
+</Aside>
+
+The key takeaways are:
+
+- Node projects
+  - `package.json` (`deps:` dev vs. regular + `"scripts"`)
+  - NPM (`package-lock.json`) vs. PNPM (`.json`)
+  - ‼️ [**`.gitignore`**](#ignore-files)
+  - ‼️ Prefer `vite` over `parcel`
+  - ‼️ Prefer PicoCSS or Tailwind over Bootstrap
+- ES6 `import` and `export`
+- Fetch API + Promises and `.then`
+  - Render DOM within the `.then` instead of async/await
+
+### Ignore Files
+
+```git
+node_modules
+dist
+```
+
+## Provided Sample - COMPLETE
+
+```json
+// package.json
+{
+  "name": "review-example-complete",
+  "version": "1.0.0",
+  "description": "1.",
+  "source": "index.html",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.1.3"
+  },
+  "devDependencies": {
+    "parcel": "^2.6.0"
+  }
+}
+```
+
+```js
+// index.js
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { getAstronautList } from './api/astronaut.js'
+import { renderAstronautListItem } from './dom/astronaut.js'
+
+let astronautListElem = document.querySelector(".astronaut-list")
+
+getAstronautList().then((data)=>{
+    console.log(data)
+    data.results.map((astronautData)=> {
+        renderAstronautListItem(astronautData, astronautListElem)
+    })
+})
+```
+
+```js
+// dom/astronaut.js
+/*
+HTML of an astronaut list item.
+replace the instances that have "THIS FORMAT HERE" with the astronautData.
+
+<li href="#" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+        <img src="PROFILE THUMBNAIL HERE" class="rounded float-start" alt=""">    
+        <h5 class="mb-1">ASTRONAUT NAME (ASTRONAUT STATUS HERE)</h5>
+        <small class="float-end">born DATE OF BIRTH HERE</small>
+    </div>
+    <small>ASTRONAUT NATIONALITY HERE (ASTRONAUT AGENCY NAME)</small>    
+    <p class="mb-1">ASTRONAUT BIO HERE </p>
+</li>
+*/
+const renderAstronautListItem = (astronautData, listElement) => {
+    let element =  ` <li href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <img src="${astronautData.profile_image_thumbnail}" class="rounded float-start" alt="...">    
+            <h5 class="mb-1">${astronautData.name} (${astronautData.status.name})</h5>
+            <small class="float-end">born ${astronautData.date_of_birth}</small>
+        </div>
+        <small>${astronautData.nationality} (${astronautData.agency.name})</small>    
+        <p class="mb-1">${astronautData.bio} </p>
+    </li>`
+    listElement.innerHTML += element
+}
+
+export { renderAstronautListItem }
+```
+
+```js
+// api/astronaut.js
+const BASE_URL = "https://lldev.thespacedevs.com/2.2.0"
+
+const getAstronautList = () => {
+    return fetch(`${BASE_URL}/astronaut/`)
+      .then((response)=> {
+          return response.json()
+      }).then((data)=> {
+          return data
+      })
+
+}
+
+export { getAstronautList }
+```
+

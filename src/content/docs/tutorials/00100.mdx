@@ -1,11 +1,8 @@
 ---
-title: TBD
+title: JavaScript Review - Form Processing
 description: SUMMARY
 sidebar:
-  label: TUTORIAL
-  badge: 
-    text: Template
-    variant: success
+  label: JS Review - Day 1
 draft: true
 ---
 
@@ -19,9 +16,48 @@ import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
 </Aside>
 
 
-<Aside type="danger" title="Remove Me!">
-  This is a ***template*** file, so remove this `<Aside>` early. Also make sure to
-  
-  - Use the correct issue number in the WIP above.
-  - Remove the Badge in the frontmatter.
-</Aside>
+
+The key takeaways are:
+
+- `.querySelector()`
+- Arrow functions
+- Template strings
+- Event Listeners
+  - `'submit'` event
+  - `.preventDefault()`
+  - `.target.elements` collection
+  - input values
+- Add/Remove classes from DOM elements
+
+```js
+/*
+HTML for list topic list item
+<li class="list-group-item">
+    NEW TOPIC HERE
+</li>
+*/
+
+let topicList = document.querySelector(".topics-list")
+
+let newTopicForm = document.querySelector(".new-topic-form")
+
+const addTopicToPage = (topicName, topicListElement) => {
+    let newTopicElement = `<li class="list-group-item">
+        ${topicName}
+    </li>`
+    topicListElement.innerHTML += newTopicElement
+}
+
+newTopicForm.addEventListener("submit", (event)=> {
+    event.preventDefault()
+    let topicInput = event.target.elements["new-topic"]
+    let newTopic = topicInput.value
+    console.log(newTopic)
+    if (newTopic === "") {
+        topicInput.classList.add("is-invalid")
+    } else {
+        topicInput.classList.remove("is-invalid")
+    }
+    addTopicToPage(newTopic, topicList)
+})
+```

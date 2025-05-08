@@ -1,0 +1,217 @@
+---
+title: JavaScript Review - Consuming APIs with Keys
+description: SUMMARY
+sidebar:
+  label: JS Review - Day 3
+draft: true
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
+
+<Image src={todo} alt="Author TODO Items" class="float-end ml-3" width="150" />
+<Aside title="Work-In-Progress (WIP)" type="caution">
+*See [issue 1](https://github.com/dgilleland/CPSC-1520/issues/1).*
+</Aside>
+
+The key takeaways are:
+
+- Reading external API specs
+  - Signing up for an API key
+  - **Securing your key** - using a `.env` file that is listed in `.gitignore` and using a package like [`pnpm add dotenv`](https://github.com/motdotla/dotenv/blob/master/README.md) (or [dotenvx](https://dotenvx.com/))
+    - This is still not secure if your key gets exposed in a *client-side script*
+- Document fragments and the DOM API to build the UI
+- JavaScript destructuring syntax
+- New file types
+  - `robots.txt`
+  - `site.webmanifest`
+  - `LICENSE.txt`
+  - `humans.txt`
+
+### OpenWeatherMap API
+
+The [OpenWeatherMap]() API has these key points that we are consuming:
+
+
+
+## Provided Sample - COMPLETE
+
+```html
+<!-- index.html - provided for you -->
+    <form class="frm weather">
+      <label for="location">Location</label>
+      <input type="text" id="location" name="location" />
+      <button type="submit">Get Weather</button>
+    </form>
+
+    <section class="weather-display">
+      <h1>Weather Update</h1>
+      <div class="details">Location: <span class="location"></span></div>
+      <div class="details">Date: <span class="date"></span></div>
+      <div class="details">Conditions: <span class="conditions"></span></div>
+      <div class="details">Current Temp: <span class="temp"></span></div>
+      <div class="details">Sunrise: <span class="sunrise"></span></div>
+      <div class="details">Sunset: <span class="sunset"></span></div>
+      <div class="forecast"></div>
+    </section>
+```
+
+```js
+// main.js
+/**
+ * Simple weather display application for demonstrating AJAX for JSON and
+ * best practices for JavaScript development.  The script makes use of the
+ * OpenWeatherMap weather API.
+ */
+(() => {
+    const API_KEY = 'YOUR_API_KEY_HERE';
+    const ENDPOINT = 'https://api.openweathermap.org/data/2.5/';
+
+    /**
+     * Displays a weather forecast for a given location.
+     * @param {Object[]} data - The array of forecast weather objects.
+     * @param {Object} el - The reference to the display DOM element.
+     */
+    const displayForecast = (data, el) => {
+        let list = document.createElement('ul'),
+            currDate,
+            nextDate,
+            currItem;
+
+        data.forEach((item) => {
+            // destructuring for display variables
+            let {dt_txt: date} = item, {
+                    temp_max: high,
+                    temp_min: low
+                } = item.main, {main: cond} = item.weather[0];
+
+            nextDate = date.split(' ')[0];
+            if (currDate !== nextDate) {
+                currDate = nextDate;
+
+                // create a new item
+                currItem = document.createElement('li');
+                currItem
+                    .classList
+                    .add('forecast-item');
+                currItem.innerHTML = `<p>${currDate}</p>`;
+            }
+
+            currItem.innerHTML += `
+                <div class="forecast-detail">
+                    <p><strong><span class="time">Time: ${date.substr(date.indexOf(' '))}</span></strong></p>
+                    <ul>
+                        <li class="condition"> Condition: ${cond}</li>
+                        <li class="temp">Temp: ${ ((high + low) / 2)}</li>
+                    </ul>
+                </div>
+            `;
+
+            list.append(currItem);
+        });
+
+        el.append(list);
+    }
+
+    /**
+     * Displays the current weather for a given location.
+     * @param {Object} data - The object of returned weather data.
+     * @param {Object} el - The reference to the display DOM element.
+     */
+    const displayWeather = (data, el) => {
+        // DOM insertion points
+        let loc = el.querySelector('.details>.location'),
+            date = el.querySelector('.details>.date'),
+            conditions = el.querySelector('.details>.conditions'),
+            temp = el.querySelector('.details>.temp'),
+            sunrise = el.querySelector('.details>.sunrise'),
+            sunset = el.querySelector('.details>.sunset'),
+            forecast = el.querySelector('.forecast');
+
+        // display the current weather data
+        loc.innerText = `${data.name}, ${data.sys.country}`;
+        date.innerText = new Date(+ data.dt * 1000);
+        conditions.innerText = data.weather[0].main;
+        temp.innerText = data.main.temp;
+        sunrise.innerText = new Date(+ data.sys.sunrise * 1000);
+        sunset.innerText = new Date(+ data.sys.sunset * 1000);
+    }
+
+    // Event listener for retrieving a weather forecast
+    document
+        .querySelector('.frm.weather')
+        .addEventListener('submit', function (e) {
+            let location = e
+                .target
+                .querySelector('[name=location]')
+                .value;
+
+            // fetch the weather data
+            fetch(`${ENDPOINT}weather?q=${location}&units=metric&appid=${API_KEY}`).then(data => {
+                return data.json()
+            }).then(json => {
+                displayWeather(json, document.querySelector('.weather-display'));
+                // now fetch the forecast data
+                return fetch(`${ENDPOINT}forecast?q=${location}&units=metric&appid=${API_KEY}`);
+            }).then(data => {
+                return data.json()
+            }).then(json => {
+                displayForecast(json.list, document.querySelector('.weather-display > .forecast'));
+            });
+
+            e.preventDefault();
+        });
+})();
+```
+
+----
+
+## New File Types
+
+### robots.txt
+
+```
+# www.robotstxt.org/
+
+# Allow crawling of all content
+User-agent: *
+Disallow:
+```
+
+### site.webmanifest
+
+```json
+{
+  "short_name": "",
+  "name": "",
+  "icons": [{
+    "src": "icon.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  }],
+  "start_url": "/?utm_source=homescreen",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa"
+}
+```
+
+### humans.txt
+
+```
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    <name> -- <role> -- <twitter>
+
+# THANKS
+
+    <name>
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5
+    Apache Server Configs, jQuery, Modernizr, Normalize.css
+```
