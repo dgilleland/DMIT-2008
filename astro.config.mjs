@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://dgilleland.github.io',
-  base: 'DMIT-2008',
+  base: '/DMIT-2008',
   integrations: [
       starlight({
           title: 'My Docs',
@@ -18,10 +18,14 @@ export default defineConfig({
           social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
           sidebar: [
               {
-                  label: 'Guides',
+                  label: 'Tutorials',
+                  autogenerate: { directory: 'tutorials' },
+              },
+              {
+                  label: 'Grokking',
                   items: [
                       // Each item here is one entry in the navigation menu.
-                      { label: 'Example Guide', slug: 'guides/example' },
+                      { label: 'Example Guide', slug: 'grok/all' },
                   ],
               },
               {
