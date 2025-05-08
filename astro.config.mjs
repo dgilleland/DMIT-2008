@@ -15,7 +15,7 @@ export default defineConfig({
             // Path to your Tailwind base styles:
             './src/styles/global.css',
           ],
-          social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+          social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/dgilleland/DMIT-2008' }],
           sidebar: [
               {
                   label: 'Tutorials',
