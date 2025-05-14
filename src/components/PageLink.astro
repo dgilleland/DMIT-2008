@@ -1,0 +1,29 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props {
+    href: string;
+    text: string;
+}
+
+const { href, text } = Astro.props;
+const docFolders = ['/grok/', '/lessons/', '/reference/', '/tutorials/'];
+let link = href;
+let parts = href.split('/').filter(x => x !== '');
+switch (parts.length) {
+    case 1:
+        link = `/${['DMIT-2008', 'lessons', ...parts].join('/')}/`;
+        break;
+    case 2:
+        link = `/${['DMIT-2008', ...parts].join('/')}/`;
+        break;
+    case 3:
+        link = `/${parts.join('/')}/`;
+        break;
+    default:
+        link = `/${['DMIT-2008', 'broken', ...parts].join('/')}/`;
+        break;
+}
+---
+
+<a href={link}>{text}</a>
