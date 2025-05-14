@@ -18,6 +18,10 @@ export default defineConfig({
           social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/dgilleland/DMIT-2008' }],
           sidebar: [
               {
+                  label: 'Lessons',
+                  autogenerate: { directory: 'lessons' },
+              },
+              {
                   label: 'Tutorials',
                   autogenerate: { directory: 'tutorials' },
               },

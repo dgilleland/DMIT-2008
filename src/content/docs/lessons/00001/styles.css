@@ -1,0 +1,4 @@
+.sl-container {
+    margin-inline: 0;
+    max-width: revert;
+}

@@ -1,0 +1,40 @@
+---
+title: Planning Calendar (DRAFT)
+description: SUMMARY
+sidebar:
+  hidden: true
+tableOfContents: false
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import PageLink from '@components/PageLink.astro';
+import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
+import './00001/styles.css';
+export const wk = (pg) => `/DMIT-2008/lessons/${pg}/`;
+
+<Image src={todo} alt="Author TODO Items" class="float-end ml-3" width="150" />
+<Aside title="Work-In-Progress (WIP)" type="caution">
+*Based on the Brightspace Primary PDF.*
+</Aside>
+
+| Week | Topic | &check; | Day 1 | &check; | Day 2 | &check; | Exercise/Assignment |
+|:----:|-------|--------:|:------|--------:|:------|--------:|:--------------------|
+|  1 | Refresher on JavaScript | &nbsp; | <PageLink href="w01-d1" text="JS Refresh - Class Intro" /> | &nbsp; | <PageLink href="w01-d2" text="JS Refresh - Language Fundamentals" /> | &nbsp; | ***Challenges in Examples*** |
+|  2 | Refresher on JavaScript | &nbsp; | <PageLink href="w02-d1" text="JS Refresh - NPM ES Modules" /> | &nbsp; | <PageLink href="w02-d2" text="JS Refresh - Wrap Up" /> | &nbsp; | ***Challenges in Examples*** |
+|  3 | Introduction to React | &nbsp; | <PageLink href="w03-d1" text="Front end Framework - Full Intro" /> | &nbsp; | <PageLink href="w03-d2" text="React - Components, JSX, Props, Children" /> | &nbsp; | ***Challenges in Examples*** |
+|  4 | Introduction to React<br/>UI Component Libraries & Styling | &nbsp; | <PageLink href="w04-d1" text="Front end Framework - Component Libraries" /> | &nbsp; | <PageLink href="w04-d2" text="UI Component Libraries and Styling Components" /> | &nbsp; | *Assignment #1* |
+|  5 | UI Component Libraries & Styling<br/>React State and Events | &nbsp; | <PageLink href="w05-d1" text="UI Component Libraries and Styling Components" /> | &nbsp; | <PageLink href="w05-d2" text="React State and Events - Events and Functions" /> | &nbsp; | ***Challenges in Examples*** |
+|  6 | React State and Events | &nbsp; | <PageLink href="w06-d1" text="React State and Events - Events and Functions, JSX Conditionals" /> | &nbsp; | <PageLink href="w06-d2" text="React State and Events - Events and Functions, JSX Conditionals" /> | &nbsp; | *Assignment #2* |
+|  7 | React Network Calls | &nbsp; | <PageLink href="w07-d1" text="React Network Calls" /> | &nbsp; | <PageLink href="w07-d2" text="React Network Calls" /> | &nbsp; | ***Challenges in Examples*** |
+|  8 | React Network Calls<br/>Deployments | &nbsp; | <PageLink href="w08-d1" text="React Network Calls" /> | &nbsp; | <PageLink href="w08-d2" text="Deployments, Short discussion on Continuous Integration and Continuous Deployments" /> | &nbsp; | *Assignment #3* |
+|  9 | React Component Lifecycle | &nbsp; |  | &nbsp; |  | &nbsp; | ***Challenges in Examples*** |
+| 10 | React Pagination & Routing | &nbsp; |  | &nbsp; |  | &nbsp; | *Assignment #4a* |
+| 11 | Features of Frontend Frameworks | &nbsp; |  | &nbsp; |  | &nbsp; | ***Challenges in Examples*** |
+| 12 | Testing | &nbsp; |  | &nbsp; |  | &nbsp; | *Assignment #4b* |
+| 13 | Global State in React Applications | &nbsp; |  | &nbsp; |  | &nbsp; | ***Challenges in Examples*** |
+| 14 | Routing/State/Pagination in React Applications | &nbsp; |  | &nbsp; |  | &nbsp; | *Theory Assessment (Report)* |
+| 15 | Extra Topics | &nbsp; |  | &nbsp; |  | &nbsp; | *Assignment #5*<br/>*Support Forum Participation Closes* |
+
+----
+
