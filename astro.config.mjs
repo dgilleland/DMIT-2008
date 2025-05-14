@@ -30,7 +30,6 @@ export default defineConfig({
                   items: [
                       // Each item here is one entry in the navigation menu.
                       { label: 'Learn to Teach', slug: 'grok/all' },
-                      { label: 'Planning Calendar', slug: 'grok/calendar' },
                   ],
               },
               {
