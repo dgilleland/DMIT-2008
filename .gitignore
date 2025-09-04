@@ -1,3 +1,27 @@
+# personal folders to ignore
+[Nn]o[Tt]rack
+[Rr]n[Dd]
+[Uu]n[Zz]ip
+
+lab-solutions.mdx
+**/tutorials/lab-solutions/gh-classroom*.png
+[Aa]nswer[Kk]eys
+
+adhoc.html
+adhoc.css
+adhoc*/
+adhoc.mdx
+adhoc.md
+adhoc.astro
+adhoc.svelte
+adhoc.js
+adhoc.ts
+adhoc-*.mdx
+
+
+# other files/folders
+debug.log
+
 # build output
 dist/
 # generated types
