@@ -1,8 +1,8 @@
 ---
-title: NPM ES Modules (W02-D1)
+title: JavaScript Review
 description: SUMMARY
 sidebar:
-  hidden: true
+  label: Week 2, Day 1
 ---
 
 import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
@@ -10,7 +10,61 @@ import { Image } from 'astro:assets';
 import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
 import cal from '@assets/undraw/undraw_spreadsheet_uj8z.svg'
 
-<Aside title="DRAFT Lesson Plan" type="caution">
+In this class we will explore the first two language review demos in your workbook:
+
+- [Refresher - What You Remember After the Break](#what-you-remember)
+- [Astronauts Example](#astronauts)
+
+<Aside title="Student Workbook Issues?" type="danger">
     <Image src={cal} alt="Author TODO Items" class="float-end ml-3" width="150" />
-    <LinkCard title="Back to Calendar" href="/DMIT-2008/lessons/77777" description="Nothing here? Check back with the in-class demo overview" />
+    We will be using our Student Workbooks in **every class**, so be sure that you have it ready to go at the start of class.
+
+    If you still do not have access to your Student Workbook, please contact your instructor for help.
 </Aside>
+
+----
+
+## What You Remember
+
+We begin be reviewing the HTML for a simple web page. The relevant portions are highlighted below.
+
+```html index.html
+<div class="container">
+  <h1 class="text-center">What did you do over break?</h1>
+  <form class="new-topic-form">
+    <div class="mb-3">
+      <label for="new-topic-input" class="form-label">Topic</label>
+      <input type="text" name="new-topic" class="form-control" id="new-topic-input">
+      <div class="invalid-feedback">
+        Please enter a valid topic
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <h5 class="pt-3">Topics</h5>
+  <ul class="topics-list list-group">
+  </ul>
+</div>    
+```
+
+The JavaScript file is empty, save for a comment about the format for each list item's content to be added to the unordered list each time the form is submitted.
+
+```js js/index.js {5-7}
+/*
+Enter JS here
+
+HTML for list topic list item
+<li class="list-group-item">
+    NEW TOPIC HERE
+</li>
+*/
+```
+
+The goal is simple: Create an event handler that will respond to form submit events and add list items to the un-ordered list.
+
+> ***Solution** to be revealed **in class** and posted here afterwards*
+
+----
+
+## Astronauts
+
