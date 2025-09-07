@@ -64,7 +64,90 @@ The goal is simple: Create an event handler that will respond to form submit eve
 
 > ***Solution** to be revealed **in class** and posted here afterwards*
 
+{/* 
+
+We're going to need a web server for our project. We'll accomplish this by turning these simple files from our starter kit into an actual Node project, using <a href="https://parceljs.org/" target="_blank">Parcel</a> as the build and development server.
+
+<Aside type="note" title="Avoid Live Server">
+  You might have been tempted to just use the VS Code extension called "Live Server" to run and test the web page. But we're going to set that extension aside and do ***real*** JavaScript development by creating **Node projects**. This will be the common practice for the whole course.
+</Aside>
+
+<Steps>
+1. Create a Node project by running `npm init -y` in the terminal. (Be sure your terminal path is at the root of this starter kit.) You should have the following as your contents in the folder.
+
+    <FileTree>
+    - ~ Folder holding the starter kit files
+      - js
+        - index.js
+      - index.html
+      - **package.json**
+      - README.md
+    </FileTree>
+
+1. We'll add in `parcel` to the project by running `npm install parcel` in the terminal.
+1. Update the `package.json` to include the following changes.
+
+    ```diff lang=json
+    +   "source": "index.html",
+        "scripts": {
+    +     "start": "parcel",
+    +     "build": "parcel build"
+        },
+    ```
+
+1. Run the project by typing `npm run start` or `npm start` in the terminal. The web page should load correctly.
+</Steps>
+
+Now we can add in the functionality of the website. We'll create an event listener function for the form's `"submit"` event and hook it up to the form.
+
+<Steps>
+1. Create the following function.
+1. Add it to the form element so that it responds to the "submit" event.
+</Steps>
+
+When we test it out, we should be able to add items to the unordered list through the form.
+
+### What we Recalled
+
+Through this simple example, we've recalled several JavaScript basics. In the end, you were able to
+
+- [x] Create a Node-based project that uses Parcel
+- [x] Use the DOM API to select elements from the page
+- [x] Create and assign a function to acts as an **event handler** for an element on the page
+
+*/}
+
+
 ----
 
 ## Astronauts
 
+Data is a core aspect of any and all websites, whether that data is simple hard-coded content (text, images, etc.) or information that is pulled from some API. In this demo, we explore <a href="" target="_blank">The Space Devs</a> public API to retrieve information about astronauts. Specifically, we'll be using the **Launch Library API 2**. The starter kit's `README.md` file contains a brief outline of the steps to follow.
+
+<FileTree>
+- ~ Starter kit folder
+  - js
+    - api
+      - astronaut.js
+    - dom
+      - astronaut.js
+    - index.js
+  - index.html
+  - README.md
+</FileTree>
+
+> ***Solution** to be revealed **in class** and posted here afterwards*
+
+{/* 
+
+
+```html index.html
+    <div class="container">
+      <h1 class="text-center">Past and Present Astronauts</h1>
+      <ul class="astronaut-list list-group">
+      </ul>
+    </div>    
+```
+
+
+*/}
