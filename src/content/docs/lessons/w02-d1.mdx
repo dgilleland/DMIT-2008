@@ -28,7 +28,7 @@ In this class we will explore the first two language review demos in your workbo
 
 We begin be reviewing the HTML for a simple web page. The relevant portions are highlighted below.
 
-```html index.html
+```html title="index.html"
 <div class="container">
   <h1 class="text-center">What did you do over break?</h1>
   <form class="new-topic-form">
@@ -49,7 +49,7 @@ We begin be reviewing the HTML for a simple web page. The relevant portions are 
 
 The JavaScript file is empty, save for a comment about the format for each list item's content to be added to the unordered list each time the form is submitted.
 
-```js js/index.js {5-7}
+```js title="js/index.js" {5-7}
 /*
 Enter JS here
 
@@ -87,7 +87,7 @@ We're going to need a web server for our project. We'll accomplish this by turni
 1. We'll add in `parcel` to the project by running `npm install parcel` in the terminal.
 1. Update the `package.json` to include the following changes.
 
-    ```diff lang=json
+    ```diff lang="json" title="package.json"
     +   "source": "index.html",
         "scripts": {
     +     "start": "parcel",
@@ -115,6 +115,16 @@ Through this simple example, we've recalled several JavaScript basics. In the en
 - [x] Use the DOM API to select elements from the page
 - [x] Create and assign a function to acts as an **event handler** for an element on the page
 
+### A Step Farther...
+
+Take this review a step farther. Define a function that will use the `document.createElement()` and `document.createTextNode()` DOM API to build and then return the following list item as a *document fragment*. Then, replace the existing template string with this function call and append the list item to the unordered list using its `.appendChild()` function.
+
+```html
+<li class="list-group-item">
+    NEW TOPIC HERE
+</li>
+```
+
 */}
 
 
@@ -141,7 +151,7 @@ Data is a core aspect of any and all websites, whether that data is simple hard-
 {/* 
 
 
-```html index.html
+```html title="index.html"
     <div class="container">
       <h1 class="text-center">Past and Present Astronauts</h1>
       <ul class="astronaut-list list-group">
