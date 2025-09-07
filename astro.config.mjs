@@ -18,11 +18,18 @@ export default defineConfig({
           social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/dgilleland/DMIT-2008' }],
           sidebar: [
               {
-                  label: 'Lessons',
+                  label: 'About',
+                  items: [
+                      // Each item here is one entry in the navigation menu.
+                      { label: 'Start Here', slug: 'about/start-here' },
+                  ],
+              },
+              {
+                  label: 'Brightspace Lessons',
                   autogenerate: { directory: 'lessons' },
               },
               {
-                  label: 'Tutorials',
+                  label: 'Other Tutorials',
                   autogenerate: { directory: 'tutorials' },
               },
               {

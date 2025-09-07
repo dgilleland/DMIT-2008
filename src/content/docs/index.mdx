@@ -1,36 +1,43 @@
 ---
 title: DMIT-2008-DG
-description: Get started building your docs site with Starlight.
+description: Built with Astro Starlight, this is an ad-hoc and temporary site that Dan makes available for his students.
 template: splash
 hero:
   tagline: Congrats on setting up a new Starlight project!
   image:
-    file: ../../assets/houston.webp
+    file: ../../assets/undraw/undraw_lightbulb-moment_16av.svg
   actions:
+    - text: For Students
+      link: /DMIT-2008/about/start-here/
+      icon: right-arrow
     - text: For Me (Dan)
       link: /DMIT-2008/grok/all/
       icon: open-book
-    - text: For Students
-      link: /DMIT-2008/tutorials/0010/
-      icon: right-arrow
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
-## Next steps
+## About This Site (&copy; 2025/26 - Dan Gilleland)
+
+I'm starting this as a place to create ad-hoc notes that support my DMIT-2008 classes in 2025. It's raw, it's not done, but it will be ***accurate***.
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+    <Card title="Sporatically Updated" icon="add-document">
+        This is <b>NOT</b> a substitute for your student workbook or attending Dan's classes. Rather, it's a supplement that Dan will add random things to.
+    </Card>
+    <Card title="Work In Progress" icon="pencil">
+        This site is a <i>Work in Progress</i> (<abbr>WIP</abbr>).
+    </Card>
+    <Card title="Have a Suggestion?" icon="setting">
+        You know Dan. You have an idea. <a target="_blank" href="https://github.com/dgilleland/DMIT-2008/issues/2">Tell him!</a>
+    </Card>
+    <Card title="Read the docs" icon="open-book">
+        Learn more in [the Starlight Docs](https://starlight.astro.build/).
+    </Card>
+    <Card title="Dev-Mode" icon="backstage">
+        For **contributors**: See the [Author Guide](http://localhost:4321/CPSC-1520/about/author-guide/) *when running in dev mode only* (`pnpm dev`).
+
+        <LinkButton href="http://localhost:4321/DMIT-2008/lessons/00001">Jump to Dan's Calendar Notes</LinkButton>
+    </Card>
 </CardGrid>
