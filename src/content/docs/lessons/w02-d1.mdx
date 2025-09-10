@@ -150,6 +150,62 @@ Data is a core aspect of any and all websites, whether that data is simple hard-
 
 {/* 
 
+The instructions in the starter kit guided us to set up our Node project with the starter files (`npm init`) and then add a couple of third-party libraries (`npm install boostrap` and `npm install parcel --save-dev`). After a couple of small tweaks to `package.json` (see below), we're ready to run the site using `npm start` in the terminal.
+
+```diff lang="json" title="package.json"
+  {
+    "name": "review-astronauts-example-START",
+    "version": "1.0.0",
+    "description": "In this example we're going to see past and present astronauts.",
+-   "main": "index.js",
++   "source": "index.html",
+    "scripts": {
+-     "test": "echo \"Error: no test specified\" && exit 1"
++     "start": "parcel"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+  }
+```
+
+<Aside type="Caution" title="Project Name and Description">
+  When you create a `package.json` using `npm init -y`, the `-y` flag will accept all the default settings for the project. Part of those default have to do with the values supplied for the `"name"` and `"description"` of the project; if a `README.md` file is present, then *npm* will take the first *markdown* line as the name and the first paragraph as the description.
+
+  This can be problematic if that first line is over 214 characters (the max limit of a package name) or if those defaults contains characters (or links) that `npm init` doesn't parse correctly. In some instances, it has caused project scripts to fail in certain environments.
+  
+  So, the rules of thumb you should follow are to
+  
+  1. Use a **short** `"name"` value that does not include spaces or uppercase characters; this name will be especially important if you wind up publishing your Node project as a stand-alone library.
+  1. Write a **meaningful** `"description"` value that is **not too long** and is in **plain text** (no markdown or other special characters). 
+</Aside>
+
+<CardGrid>
+  <LinkCard
+    title="Docs on package.json"
+    href="https://docs.npmjs.com/cli/v11/configuring-npm/package-json" 
+    target="_blank"
+    description="Official documentation on the `package.json` file."
+  />
+  <LinkCard
+    title="Key Node files"
+    href="https://dev.to/fazal_mansuri_/the-ultimate-guide-to-packagejson-package-lockjson-yarnrc-babelconfig-tsconfigjson-more-2gn5" 
+    target="_blank"
+    description="The Ultimate Guide to package.json, package-lock.json, .yarnrc, babel.config, tsconfig.json & More."
+  />
+</CardGrid>
+
+The ReadMe for this project had us jump into exploring the API we're going to use. Before we do that, however, let's make use of Bootstrap in our site by importing it in our JavaScript entry point (`js/index.js`).
+
+```js title="js/index.js"
+import 'bootstrap/dist/css/bootstrap.min.css';
+```
+
+<Aside title="Dark Mode, anyone?" type="tip">
+If you prefer Dark Mode with Bootstrap, you can accomplish it easily on the whole page by adding `data-bs-theme="dark"` to the `<html>` tag.
+</Aside>
+
+
 
 ```html title="index.html"
     <div class="container">
