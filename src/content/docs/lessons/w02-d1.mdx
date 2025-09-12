@@ -62,9 +62,7 @@ HTML for list topic list item
 
 The goal is simple: Create an event handler that will respond to form submit events and add list items to the un-ordered list.
 
-> ***Solution** to be revealed **in class** and posted here afterwards*
-
-{/* 
+### Node Project Setup
 
 We're going to need a web server for our project. We'll accomplish this by turning these simple files from our starter kit into an actual Node project, using <a href="https://parceljs.org/" target="_blank">Parcel</a> as the build and development server.
 
@@ -98,11 +96,42 @@ We're going to need a web server for our project. We'll accomplish this by turni
 1. Run the project by typing `npm run start` or `npm start` in the terminal. The web page should load correctly.
 </Steps>
 
+### Handling Form Submit
+
 Now we can add in the functionality of the website. We'll create an event listener function for the form's `"submit"` event and hook it up to the form.
 
 <Steps>
-1. Create the following function.
+1. Create the following function in your `index.js` file.
+
+    ```js title="index.js"
+    const handleSubmit = function(evt) {
+        // client-side only
+        evt.preventDefault(); // stop the POST to the webserver
+
+        const targetForm = evt.target;
+        const textInput = targetForm.elements['new-topic'];
+
+        if(textInput.value.trim() !== '') {
+            // Good, I have text... 🚀
+            const list = document.querySelector('ul');
+            list.innerHTML += `<li>${textInput.value.trim()}</li>`;
+            textInput.value = ''; // clear the input
+            textInput.classList.remove('is-invalid');
+        } else {
+            // Bad input 😢
+            textInput.classList.add('is-invalid');
+        }
+        textInput.focus();
+    }
+    ```
+
 1. Add it to the form element so that it responds to the "submit" event.
+
+    ```js title="index.js"
+    const myForm = document.querySelector('form');
+    myForm.addEventListener('submit', handleSubmit);
+    ```
+
 </Steps>
 
 When we test it out, we should be able to add items to the unordered list through the form.
@@ -125,30 +154,14 @@ Take this review a step farther. Define a function that will use the `document.c
 </li>
 ```
 
-*/}
-
 
 ----
 
 ## Astronauts
 
-Data is a core aspect of any and all websites, whether that data is simple hard-coded content (text, images, etc.) or information that is pulled from some API. In this demo, we explore <a href="" target="_blank">The Space Devs</a> public API to retrieve information about astronauts. Specifically, we'll be using the **Launch Library API 2**. The starter kit's `README.md` file contains a brief outline of the steps to follow.
+Data is a core aspect of any and all websites, whether that data is simple hard-coded content (text, images, etc.) or information that is pulled from some API. In this demo, we explore <a href="https://lldev.thespacedevs.com/2.2.0" target="_blank">The Space Devs</a> public API to retrieve information about astronauts. Specifically, we'll be using the **Launch Library API 2**. The starter kit's `README.md` file contains a brief outline of the steps to follow.
 
-<FileTree>
-- ~ Starter kit folder
-  - js
-    - api
-      - astronaut.js
-    - dom
-      - astronaut.js
-    - index.js
-  - index.html
-  - README.md
-</FileTree>
-
-> ***Solution** to be revealed **in class** and posted here afterwards*
-
-{/* 
+### Project Setup
 
 The instructions in the starter kit guided us to set up our Node project with the starter files (`npm init`) and then add a couple of third-party libraries (`npm install boostrap` and `npm install parcel --save-dev`). After a couple of small tweaks to `package.json` (see below), we're ready to run the site using `npm start` in the terminal.
 
@@ -169,7 +182,7 @@ The instructions in the starter kit guided us to set up our Node project with th
   }
 ```
 
-<Aside type="Caution" title="Project Name and Description">
+<Aside type="caution" title="Project Name and Description">
   When you create a `package.json` using `npm init -y`, the `-y` flag will accept all the default settings for the project. Part of those default have to do with the values supplied for the `"name"` and `"description"` of the project; if a `README.md` file is present, then *npm* will take the first *markdown* line as the name and the first paragraph as the description.
 
   This can be problematic if that first line is over 214 characters (the max limit of a package name) or if those defaults contains characters (or links) that `npm init` doesn't parse correctly. In some instances, it has caused project scripts to fail in certain environments.
@@ -195,6 +208,8 @@ The instructions in the starter kit guided us to set up our Node project with th
   />
 </CardGrid>
 
+### Importing Stylesheets
+
 The ReadMe for this project had us jump into exploring the API we're going to use. Before we do that, however, let's make use of Bootstrap in our site by importing it in our JavaScript entry point (`js/index.js`).
 
 ```js title="js/index.js"
@@ -205,15 +220,150 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 If you prefer Dark Mode with Bootstrap, you can accomplish it easily on the whole page by adding `data-bs-theme="dark"` to the `<html>` tag.
 </Aside>
 
+### Separation of Concerns
 
+When deciding how to organize our JavaScript logic, a good principle to follow is **separation of concerns**. As such, we're using <a href="https://developer.mozilla.org/docs/Web/JavaScript/Guide/Modules" target="_blank">JavaScript Modules</a> and we're organizing our code in a way that separates API calls from the code that renders to the DOM.
+
+<FileTree>
+- ~ Starter kit folder
+  - js
+    - api The layer that gets JSON data
+      - astronaut.js
+    - dom The layer that renders to the DOM
+      - astronaut.js
+    - index.js The "main" entry point of our app
+  - index.html
+  - README.md
+</FileTree>
+
+### API Calls
+
+There are a few ways we can make our API calls. The key thing to know is that our `fetch()` function returns a `Promise<Response>`. We'll keep it simple for now, and just ensure we return a list of the astronauts as a JavaScript object (meaning that we need to convert it from the JSON string returned by the API endpoint).
+
+```js title="js/api/astronaut.js"
+const BASE_URL = "https://lldev.thespacedevs.com/2.2.0"
+
+// api functions here.
+const getAstronautList = function() {
+    return fetch(BASE_URL + '/astronaut/')
+            .then(response => response.json());
+}
+
+export { getAstronautList }
+```
+
+To make our code available to other scripts, we need to `export` our function. In the main `index.js` of our app, we can import it and just dump out the data to the console (to make sure our API call is working).
+
+```js title="js/index.js"
+// js here.
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { getAstronautList } from './api/astronaut';
+
+getAstronautList().then(data => {
+    console.log(data);
+});
+```
+
+Besides ensuring that we are getting data back from *The Space Devs*, this gives us the opportunity to examine what **structure** or shape the data has. We'll need to know this when it comes to the DOM Rendering step.
+
+<Aside type="tip" title="Read The Docs">
+  The majority of our time as developers is spent *reading* code rather than *writing* code. That reading time includes going over whatever documentation surrounds code we're trying to understand. And whenever we are consuming API endpoints (external or internal), we must pay attention to the documentation.
+  
+  In our case the Astronaut's <a href="https://ll.thespacedevs.com/docs/#/astronauts" target="_blank">docs</a> and <a href="https://ll.thespacedevs.com/2.3.0/astronauts/" target="_blank">endpoints</a> are clearly laid out in The Space Devs website. They even have an <a href="https://spacelaunchnow.me/astronaut/" target="_blank">example of rendered data</a> we can explore.
+
+  Published API endpoints act as a **contract** between the provider of the data (e.g.: *The Space Devs*) and the consumer (us developers). That's why so much time is spent in creating quality documentation on how to access and use APIs.
+</Aside>
+
+### DOM Rendering
+
+The target for the astronaut data is the `<ul>` tag. Similar to the last demo, there is only one unordered list on the page.
 
 ```html title="index.html"
-    <div class="container">
-      <h1 class="text-center">Past and Present Astronauts</h1>
-      <ul class="astronaut-list list-group">
-      </ul>
-    </div>    
+<div class="container">
+  <h1 class="text-center">Past and Present Astronauts</h1>
+  <ul class="astronaut-list list-group">
+  </ul>
+</div>    
+```
+
+As far as our rendering needs are concerned, all we need is the data about each individual astronaut and a reference to the `<ul>` for displaying the content. Let's build a shell of the function and ensure it is exported from our module.
+
+
+```js title="js/dom/astronaut.js"
+const renderAstronautListItem = function(astronautData, listElement) {
+  // TODO: complete this function stub
+}
+
+export { renderAstronautListItem }
+```
+
+When we have an object as our parameter (`astronautData`) and we need to get several pieces of data from that object (in this case, to fill in placeholders in our template string), an excellent approach is to use <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Destructuring" target="_blank">**destructuring**</a>. For example, our astronaut data has a huge set of properties, but we are interested in only a few. With *destructuring syntax*, we can declare variables for the information we want displayed.
+
+```js title="js/dom/astronaut.js"
+const renderAstronautListItem = function(astronautData, listElement) {
+    // Get the properties via destructuring the object
+    const { name, bio } = astronautData;
+}
+```
+
+With that in place, we can build our HTML template string with some basic content. We'll start with the name and bio, just to see if it's rendering correctly. We'll append the list item to the `listElement` reference.
+
+```diff lang="js" title="js/dom/astronaut.js"
+  const renderAstronautListItem = function(astronautData, listElement) {
+      // Get the properties via destructuring the object
+      const { name, bio } = astronautData;
++     const listItem = `<li>${name}<br />${bio}</li>`;
++     listElement.innerHTML += listItem;
+  }
+  
+  export { renderAstronautListItem }
+```
+
+Returning to the entry point of our app, the next step is to call `renderAstronautListItem` with the data from the API call.
+
+```diff lang="js" title="js/index.js"
+  // js here.
+  import 'bootstrap/dist/css/bootstrap.min.css';
+  import { getAstronautList } from './api/astronaut';
++ import { renderAstronautListItem } from './dom/astronaut';
+  
+  getAstronautList().then(data => {
+-     console.log(data);
++     // use the data.results array and render each astronaut
++     const listContainer = document.querySelector('ul');
++     data.results.forEach(person => {
++         renderAstronautListItem(person, listContainer);
++     });
+  });
 ```
 
 
-*/}
+Our preliminary results should show some basic data for each astronaut.
+
+> **TODO: Screenshot here**
+
+To wrap things up, we can resume dropping all the astronaut data in our list item. I added a little extra for the status to indicate if the astronaut is currently on a space mission. Here is the final version of our `renderAstronautListItem` function.
+
+```js title="js/dom/astronaut.js"
+const renderAstronautListItem = function(astronautData, listElement) {
+    // Get the properties via destructuring the object
+    const { name, agency, bio, status, date_of_birth, in_space, nationality, profile_image_thumbnail } = astronautData;
+
+    let statusDescription = status.name;
+    if(in_space) {
+        statusDescription += ' | Currently in Space'
+    }
+    const listItem = `<li href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <img src="${profile_image_thumbnail}" class="rounded float-start" alt="${name} thumbnail">    
+            <h5 class="mb-1">${name} (${statusDescription})</h5>
+            <small class="float-end">born ${date_of_birth}</small>
+        </div>
+        <small>${nationality} (${agency.name})</small>    
+        <p class="mb-1">${bio}</p>
+    </li>`;
+    listElement.innerHTML += listItem;
+}
+
+export { renderAstronautListItem }
+```
