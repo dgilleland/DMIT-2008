@@ -2,338 +2,192 @@
 title: Front-End Frameworks - Overview and Full Intro (W03-D1)
 description: SUMMARY
 sidebar:
-  hidden: true
+  label: Week 3, Day 1
 draft: true
 ---
 
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+
+
+<a href="https://react.dev/" target="_blank">React</a> is a JavaScript framework for creating **components** in web applications. <a href="https://nextjs.org/" target="_blank">NextJS</a> is a meta-framework that supports React components and adds various extras to your app.
+
+<Aside type="note" title="Three-Part Series" icon="list-format">
+  *This is **part 1** of a 3-part set of classes on the **Intro to React and NextJS**.*
+
+  - **Part 1** - An Introductionto React and NextJS
+  - [Part 2](/DMIT-2008/w03-d2/) - Fundamentals of Stateless Components
+  - [Part 3](/DMIT-2008/w04-d1/) - Component Libraries
+</Aside>
+
+NextJS includes features such as
+
+- page routing
+- API endpoints
+- server-side rendering (SSR)
+- static site generation (SSG)
+- layout support
+- image optimization
+- CSS styling supports (including libraries)
+
+There are more features in NextJS, but before we even begin to explore those, we need to understand **React**.
+
+## React Components
+
+import reactLogo from '../../../assets/react-logo-svgrepo-com.svg';
+
+<Image src={reactLogo} alt="React Logo" class="float-end w-32" />
+
+**React** has been around since 2011. It was created by Facebook employee Jordan Walke and went open-source in 2013. Since then, it has grown and matured as the predominant JavaScript framework for **component development**. As of September 2025, the latest version of React is `19.1.0`.
+
+### What are Components?
+
+import undrawComponent from '../../../assets/undraw/undraw_upload_cucu.svg';
+
+<Image src={undrawComponent} alt="React Components" class="float-start w-40 pr-3" />
+
+You can think of components as re-usable parts of a web page.
+
+It might be a user avatar, or a file/folder treeview, or any number of things that you want on your page. The idea is that you - the web developer - break your web application into smaller pieces - *components* - that work independently to achieve some *visual* characteristics and/or some *functional* characteristics on your site. It's like designing your own lego blocks!
+
+It's not just about reusability either. By breaking a web page down into components, you are practicing **modularization**. Modularizing our pages makes it easier to reason about and maintain our applications. This has been a principle of good software design for several decades. React helped bring this principle to web development.
+
+Just like HTML tags, components can be **stacked** or **nested**. For example, in this HTML snippet, the `<h1>` tag is *stacked* on top of the paragraph tag. Meanwhile, the `<strong>` tag is *nested* inside the paragraph.
+
+```html title="HTML snippet"
+<h1>Welcome to React!</h1>
+<p>The world of React is a world of <strong>components</strong>.</p>
+```
+
+If you think of just the tags themselves and ignore the text, you can see a tree-like structure of the HTML elements. This is how the DOM exists in your browser - a collection of elements that can contain child elements.
+
+<FileTree>
+- h1/
+- p/
+  - strong/
+</FileTree>
+
+Creating React components is like creating your own customized tag that you can drop into the DOM. It even looks a lot like HTML, thanks to **JSX**.
+
+### What is JSX?
+
+React components mix JavaScript functionality with a tag-based representation of vanilla HTML and custom React components. This tag-based representation is accomplished with <a href="https://react.dev/learn/writing-markup-with-jsx" target="_blank">JSX</a>.
+
+**JSX** stands for *JavaScript XML*. In the React world, these files end with the extension `*.jsx`. It's a type of text file that goes through a separate parsing/interpretation process than ordinary `*.html` and `*.js` files. In fact, the browser isn't the one that processes JSX. Rather, it is *pre*-processed at *build time*. This pre-processing results in some JavaScript file(s) that can be sent to the browser by the web server.
+
+### Stateful vs. Stateless Components
+
+React components can be centered just around *visual representation* (stateless) or around some *data processing* (stateful). We'll dive deeper into the distinction between these in later lessons. For now, we'll explore stateless components.
+
+Stateless components can still have JavaScript functionality to them, but they are less about representing some data that has to be maintained *across components* in the application. Rather, any data or information in the component is simply "passed down" through something called **Props**. *Props* is simply short for "properties", and you can think of those as being analagous to **attributes** on HTML tags.
+
+### A React Component Example
+
+Here's an example of a pair of super-simple React components.
+
+
+
+It acts as a simple tree-view component in a stateless fashion.
+
+```jsx title="TreeView.jsx"
+
+```
+
+```jsx title="TreeNode.jsx"
+
+```
+
+We'l explain 
+
 {/* 
+## Lesson Plan 1 - React/Next Intro
+
+- Go through slides [Week 3 Day 1 Slides - Intro to react](DMIT2008-Week3-Day1-react-new.pptx)
+  - Topics to Add
+    - what is react
+    - Why?
+    - What is a component
+    - Folder Structure
+  - Walk through react developer tools
+  - things to update yearly
+    - [State of js link](https://2021.stateofjs.com/en-US/libraries)
+    - [Web Frameworks](https://insights.stackoverflow.com/survey/2021#web-frameworks)
+    - [Trending Libraries](https://trends.google.com/trends/explore?date=today%205-y&geo=US&q=%2Fm%2F0268gyp,%2Fm%2F012l1vxv,%2Fg%2F11c0vmgx5d,%2Fg%2F11c5t00h04,%2Fm%2F0j45p7w)
+- Run through the [Intro Example](./nextjs-intro-START/README.md)
 
 ✨✨ Incorporate the key review items from this slideshow from Daniel M:
 
 https://dmit-2008.github.io/dmit2008/classes/week-3/day-1
+
 */}
 
-> ***Solution** to be revealed **in class** and posted here afterwards*
+## TUTORIAL - Creating NextJS/React Projects
+
+The process to create a new NextJS application that uses React is quite simple.
+
+<Steps>
+1. Run `npx create-next-app@latest <folder_name>` in the terminal, where `<folder_name>` is whatever name you choose for the application. This will put all the starter code in a subfolder of that name.
+1. Choose whatever options you want in your NextJS application.
+1. To run the app, `cd` into your subfolder and run `npm run dev`
+</Steps>
+
+Here are some notable aspects of the process.
+
+### NextJS Setup Options
+
+Everything begins with running `create-next-app` in the terminal.
+
+```ps title="Powershell"
+npx create-next-app@latest hello-next
+```
+   
+This runs an external installer (`create-next-app@latest`) and passes in a folder name as the destination for the boilerplate code. If this is the first time running `create-next-app`, you will be prompted for permission to install it.
+
+```ps title="VS Code Terminal" " y"
+PS ~/src/B/nextjs-intro-START> npx create-next-app@atest hello-next
+Need to install the following packages:
+create-next-app@15.5.3
+Ok to proceed? (y) y
+```
+
+During the setup process, `create-next-app` will prompt us with several questions. Use the following responses for a minimal set of boilerplate starter code.
+
+- Would you like to use TypeScript? ... **No**
+- Which linter would you like to use? » **None**
+- Would you like to use Tailwind CSS? ... **No**
+- Would you like your code inside a `src/` directory? ... **No**
+- Would you like to use App Router? (recommended) ... **No**
+- Would you like to use Turbopack? (recommended) ... **No**
+- Would you like to customize the import alias (`@/*` by default)? ... **No**     
+
+It produces the following files/folders in a subfolder named "hello-next".
+
+<FileTree>
+- node_modules/
+- pages/
+- public
+  - api
+    - hello.js
+  - _app.js
+  - _document.js
+  - index.js
+- styles/
+- .gitignore
+- jsconfig.json
+- next.config.mjs
+- package-lock.json
+- package.json
+- README.md
+</FileTree>
 
 
-import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
-import { Image } from 'astro:assets';
-import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
-import cal from '@assets/undraw/undraw_spreadsheet_uj8z.svg'
 
-
-- [NextJS Intro](#nextjs-intro)
-- [NextJS Components Intro](#nextjs-components-intro)
-- [NextJS Component Lists](#nextjs-component-lists)
-- [Bootstrap Component Library](#bootstrap-component-library)
-- [MUI Component Library](#mui-component-library)
-
-
-## NextJS Intro
-
- Steps
-
-1. Install create-next-app
-	`npm install -g create-next-app@latest`
-2. Create a project with create-next-app
-	`npx create-next-app@latest hello-next`
-	This is going to take a while to build your project in the nested folder (hello-next)
 4. Run the project
-	Go in to the folder
-	`cd hello-next`
-	Run the project
-	`npm run dev`
+  Go in to the folder
+  `cd hello-next`
+  Run the project
+  `npm run dev`
 5. Change the title in the "pages/index.js" file in your "hello-next" project and see it change immediately on the page (this is hot module reload)
-	- this is essentially the beginning to see what we're going to be building and how we're going to do it.
+  - this is essentially the beginning to see what we're going to be building and how we're going to do it.
 
 ----
-
-## NextJS Components Intro
-
-Steps
-
-1. Create and Run the Next.js Project
-    Create the project
-    `npx create-next-app@latest components-example`
-    Go in to the folder
-    `cd components-example`
-    Run the project
-    `npm run dev`
-2. In the "index.js"
-- remove everything in the "main" tag except for the title ("h1").
-    - change it to a title you're comfortable with.
-- remove the footer.
-- Observe the differences on the page as you make these changes.
-3. In your "components-example" example project create a folder named "components" in the root of your project.
-4. in the "components" folder create a file named "Hello.js"
-    - create a function named "Hello" with "export default" before the function keyword.
-    - in that function just return some html in it.
-5. import your newly created component in the "index.js" file in your "pages" folder with the following
-```js
-import Hello from '../components/Hello.js'
-```
-6. use that component in your "Home" component by writing
-
-```jsx
-<Hello />
-```
-under the title tag in the "main"
-
-- Observe the differences on the page as you make the changes.
-
-7. Create a new component called "NewConcept" in a folder called "NewConcept.js" like you did with the "Hello" component. The only difference is that you're going to pass a parameter named "props"
-- in your component use the prop named "concept" in the component itself. It should look something like below.
-```jsx
-  return <p>
-    In this class we'll learn: {props.concept}
-  </p>
-```
-
-8. import it and use it in your "index.js"
-- import it like below.
-
-```jsx
-        import NewConcept from '../components/NewConcept'
-```
-
-- use it under the the Hello and define a prop "concept" like below. 
-
-```jsx
-        <NewConcept concept={"how to import components"} />
-        <NewConcept concept={"how to use props in a component"} />
-        <NewConcept concept={"how to import components"} />
-```
-
-- This will pass in the "concept" as the argument of the previous step.
-9. Create a componenet called "ComponentWrapper" in the same way that you've done with the past two (define the props parameter).
-- In the function we're going to use a special prop named "children" like so.
-```jsx
-        return <div style={{color: props.textColor}}>
-          {props.children}
-        </div>
-```
-
-- this is an example using the "children" property. If an element has this it can wrap other components (see the next step) or you can "nest" components in its' definition. 
-- this is an example using the "style" property on elements which is given to us by "react". Although we won't use this much in the course it is a way (not the only/best way). If you want to [read more about style read here](https://reactjs.org/docs/dom-elements.html#style) 
-10. import it in the index.js file and wrap all of the other components with it.
-    
-- import the component.
-```jsx
-    import ComponentWrapper from '../components/ComponentWrapper'
-```
-
-- nest all of the other components like so.
-```jsx
-        <ComponentWrapper textColor={"blue"}>
-          <Hello />
-          <NewConcept concept={"how to import components"} />
-          <NewConcept concept={"how to use props in a component"} />
-          <NewConcept concept={"how to import components"} />
-        </ComponentWrapper>
-```
-
-- Observe the differences on the page.
-
-Note: this notation is how we're going to name componts throughout the course. That is the file having the same as the name of the component.
-
-
-----
-
-## NextJS Component Lists
-
-Steps
-
-1. Create and Run the Next.js Project
-    Create the project
-    `npx create-next-app@latest components-lists-example`
-    Go in to the folder
-    `cd components-lists-example`
-    Run the project
-    `npm run dev`
-2. In the "index.js"
-- remove everything in the "main" tag except for the title ("h1").
-    - change it to a title you're comfortable with.
-- remove the footer.
-- Observe the differences on the page as you make these changes.
-3. Create a new "components" folder and in that folder create a component file named "SimpsonsCharacters.js". In that file create a function named "SimpsonsCharacters" like you would for any component (this should become second nature shortly.)
-- import that file in your "index.js" file.
-```js
-import SimpsonsCharacters from '../components/SimpsonsCharacters'
-```
-- use the component in your JSX
-```js
-<SimpsonsCharacters />
-```
-4. in the "SimpsonsCharacters.js" file add a list of characters that we're going to loop over.
-```js
-const SIMPSON_CHARACTERS = [
-	"Homer Simpson",
-	"Bart Simpson",
-	"Marge Simpson",
-	"Mr. Burns",
-	"Lisa Simpson",
-	"Apu Nahasapeemapetilon",
-	"Sideshow Bob",
-	"Milhouse Van Houten",
-	"Ned Flanders",
-]
-```
-
-5. In the "SimpsonsCharacters" we're going to take a look at how to loop over lists in JSX.
-- We're going to loop over the `SIMPSON_CHARACTERS` using `map` by using `{}` in the JSX to show that we're going to be using "js" in  your JSX.
-- Below we're going to see that we use the `key` on each `<li></li>` element because this is a requirement with react. More on [lists and keys here](https://reactjs.org/docs/lists-and-keys.html#gatsby-focus-wrapper)
-- The component now will look somethis like this.
-```jsx
-// SIMPSON_CHARACTERS defined up here.
-
-export default function SimpsonsCharacters() {
-  return <ul>
-    {SIMPSON_CHARACTERS.map((characterName, index)=> {
-      return <li key={index}>{characterName}</li>
-    })}
-  </ul>
-}
-```
-
-- Observe the differences on the page as you make these changes.
-
-
-----
-
-## Bootstrap Component Library
-
-Why?
-
-Design is difficult, and there's a lot of boilerplate that you don't necessarily need to build from scratch.
-
-You've probably dealt with bootstrap before, so we're going to see the "react" way of getting this library in your project.
-
-Steps
-
-1. Create and Run the Next.js Project
-    Create the project
-    `npx create-next-app@latest components-bootstrap-example`
-    Go in to the folder
-    `cd components-bootstrap-example`
-    Run the project
-    `npm run dev`
-2. Stop your project (ctrl+c) and install react-bootstrap as seen in the [instructions here](https://react-bootstrap.github.io/getting-started/introduction)
-- in your terminal (and at the root of the project) install bootstrap via npm `npm install react-bootstrap bootstrap`
-- just as we've done in CPSC1520, we need to add the bootstrap stylesheets to the entry point of the application.
-```js
-import 'bootstrap/dist/css/bootstrap.min.css';
-```
-Note: if you remove the other stylesheets you'll have to modify your index.js file in the "pages" folder.
-
-Note: for next.js we need to add this bootstrap to the `_app.js` file so that the entire application has access ([more information here](https://nextjs.org/docs/basic-features/built-in-css-support#adding-a-global-stylesheet))
-
-3. Remove the classes from all components and only keep the title like we've done in previous examples.
-
-4. Let's add some components from this library explore how to understand and read the documentation.
-- As you're reading the documentation of react bootstrap you need to understand how to import the components in your application. You can import components into your file by [looking at this part of the docs](https://react-bootstrap.github.io/getting-started/introduction/#importing-components)
-	- Add the button like they do in the docs right here.
-- Let's take a look a look at the [bootstrap grid](https://react-bootstrap.github.io/layout/grid/)
-	- let's copy the code in the layout so that we can row and columns in our project.
-	- import the components using the technique you just learned in the previous bullet point.
-	- observe the changes on the page, but also see that the components "Col" and "Row" use the "children" prop (even if we don't see it) because they are "wrapping" other components.
-
-5. Create a new "components" folder and create a component named "ComponentLibrariesList" in that folder.
-- above the component, copy the list below into the file.
-```js 
-const UI_LIBRARY_LIST = [
-	{
-		name: "MUI",
-		url: "https://mui.com/"
-	},
-	{
-		name: "React Bootstrap (the one we're looking at)",
-		url: "https://react-bootstrap.github.io/"
-	},
-	{
-		name: "Ant Design",
-		url: "https://ant.design/docs/react/introduce"
-	},
-	{
-		name: "Semantic UI",
-		url: "https://react.semantic-ui.com/"
-	}
-]
-```
-- we're going to loop through the `UI_LIBRARY_LIST` to display the list of available ui libraries. We're going to use the [bootstrap list groups](https://react-bootstrap.netlify.app/components/list-group/#basic-example)
-to display this information.
-- within the JSX we're going to loop through the list of object using `map` like we did for the last example. At the end this is what the JS will look like
-```js
-  return <ListGroup>
-    { UI_LIBRARY_LIST.map((uiLibrary, index)=> {
-        return <ListGroup.Item key={index}>
-          <a href={uiLibrary.url}>{uiLibrary.name}</a>
-        </ListGroup.Item>
-      })
-    }
-  </ListGroup>
-```
-
-6. Import the "ComponentLibrariesList" in your "index.js" page, and use it in the JSX in one the "Col" defintions like so.
-```js
-<Col>
-  <h4>Available component libraries</h4>
-  <ComponentLibrariesList />
-</Col>
-```
-
-
-----
-
-## MUI Component Library
-
-Why?
-
-Design is difficult, and there's a lot of boilerplate that you don't necessarily need to build from scratch.
-
-The MUI react is used by a whole bunch of companies that you've heard of/used their applications. You can take a look at the details 
-
-Steps
-
-1. Create and Run the Next.js Project
-    Create the project
-    `npx create-next-app@latest components-mui-example`
-    Go in to the folder
-    `cd components-mui-example`
-    Run the project
-    `npm run dev`
-
-2. Stop your project (ctrl+c) and install MUI using [these intructions](https://mui.com/material-ui/getting-started/installation/)
-- in your terminal (and the root of the project) install MUI via npm with `npm install @mui/material @emotion/react @emotion/styled
-`
-- If you want the roboto font you can add the Roboto font to the "Head" component of the JSX like so
-```html
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-/>
-```
-Note: We're going to learn about the file `_document.js` file in next.js which adds a header to each separate page which is a more appropriate place to add this. We're going to learn about this `_document.js` and the concept of pages in this framework later in the course. 
-3. Remove everything in the "main" element and we're going to take a look at how to use the MUI component library. Here is the link to the [documentation here](https://mui.com/material-ui/getting-started/usage/#quick-start). It's very similar to the react-bootstrap library we looked at earlier. 
-- We're going to use a [Container and a Box (docs here)](https://mui.com/material-ui/react-container/) to layout our site in the index.js as follows in the JSX:
-```jsx
-<Container maxWidth="sm">
-  <Box sx={{ my: 4 }}>
-    {/* we'll add some content here.*/}
-  </Box>
-</Container>
-````
-- We're going to use [Typography (docs here)](https://mui.com/material-ui/react-typography/#component)
-```jsx
-<Typography variant="h2" component="h2">
-  MUI looks good.
-</Typography>
-<Typography variant="p" component="p">
-  You can perhaps see why this is a popular package.
-</Typography>         
-```
-- Observe the changes on the page.
-- Explore the docs and see all the different types of components there are. In this course we're going to use this quite a bit, so you'll have to learn to get comfortable with navigating these docs and using it in your projects.
-
-
-----
-
