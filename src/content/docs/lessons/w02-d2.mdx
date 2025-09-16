@@ -9,6 +9,8 @@ import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCar
 import { Image } from 'astro:assets';
 import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
 import cal from '@assets/undraw/undraw_spreadsheet_uj8z.svg'
+import fallOfIE from './w02-d2/BrowserUsageShare.png';
+
 
 There's a whole lot more to the JavaScript fundamentals than what we've explored in the previous demos. They include
 
@@ -19,8 +21,10 @@ There's a whole lot more to the JavaScript fundamentals than what we've explored
 - What is a **closure** and how does it work?
 - Documenting our functions/classes with JSDocs.
 
+In addition to knowing JavaScript fundamentals, it's time to start thinking more intently about **application design**. Knowing about principles such as ***separation of concerns*** and ***component design*** are going to play a large part in appreciating all the benefits we'll discover as we [begin our Journey with React and NextJS](/DIMT-2008/w03-d1/) in the next lesson.
+
 <Aside title="Extra Starter Kits" type="tip">
-  In your student workbook, Dan has thrown in some extra starter kit demos under the JavaScript Review (Topic A).
+  In your student workbook, Dan has thrown in some extra starter kit demos he got from some other people. It's under the JavaScript Review (topic `A` in the `src` folder).
 </Aside>
 
 
@@ -29,6 +33,14 @@ There's a whole lot more to the JavaScript fundamentals than what we've explored
 <Aside title="Starter Kit Files" type="note">
   See [Dan's `Agenda.md` for *your* section](/DMIT-2008/about/start-here/#audience--content-advisory) to run the script that will copy the starter kit files to your student workbook.
 </Aside>
+
+This starter kit is an opportunity to review/learn a bit about the following "vanilla" JavaScript features and various "~~Best~~ *Better* Practices":
+
+- JS Doc comments
+- Managing secrets
+- Modularization/Separation of Concerns
+
+In addition, we'll explore a more modern alternative to Parce: <a href="" target="_blank">**Vite**</a>.
 
 {/* 
 
@@ -39,7 +51,449 @@ There's a whole lot more to the JavaScript fundamentals than what we've explored
 
 https://dmit-2008.github.io/dmit2008/classes/week-2/day-2
 
+💡 RestCountries.com
+
 
 ✨ Try to work in a rough equivalent of `React.render(tag, props, children)` in vanilla JavaScript 
 
 */}
+
+<Aside type="note" title="This is old...">
+  To let you know how old this starter kit code is, take note of this part of the `index.html`.
+
+  ```html title="index.html"
+  <body>
+    <!--[if IE]>
+      <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+        your experience and security.
+      </p>
+    <![endif]-->
+  ```
+  
+  Microsoft officially ended support for IE (*Internet Explorer*) back in ***2022***, but its decline in popularity began with the rise of Google Chrome (released in 2008). By 2012, Chrome passed IE in popularity, as you can see in the following chart (By <a href="https://gs.statcounter.com/browser-market-share#yearly-2009-2025" target="_blank">Statcounter</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=163204140" target="_blank">CC BY-SA 3.0</a>).
+
+  <Image src={fallOfIE} alt="Browser User Share"/>
+
+</Aside>
+
+
+### HTML Changes
+
+To make this just a bit more modern (and to reduce some of the "noise" in the HTML file), make the following modifications to the `index.html` of the starter kit. The most important part of these changes is moving the `<script>` tags from the end of the file and placing them in the `<head>` portion. Another notable change is the switch from using `class=` attributes to `id=`; this is because it's a much better practice to use identifier attributes for elements we want to find and manipulate via JavaScript.
+
+```diff lang="html" title="index.html"
+  <!DOCTYPE html>
+  <html class="no-js" lang="">
+    <head>
+      <meta charset="utf-8" />
+      <title>ES6 Example Weather Application</title>
+-     <meta name="description" content="" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+      <link rel="manifest" href="site.webmanifest" />
+      <!-- Place favicon.ico in the root directory -->
+  
+      <link rel="stylesheet" href="css/normalize.css" />
+      <link rel="stylesheet" href="css/main.css" />
+  
+      <meta name="theme-color" content="#fafafa" />
++     <script src="js/vendor/modernizr-3.7.1.min.js" defer></script>
++     <script src="js/plugins.js" defer></script>
++     <script src="js/main.js" type="module"></script>
+    </head>
+  
+    <body>
+-     <!--[if IE]>
+-       <p class="browserupgrade">
+-         You are using an <strong>outdated</strong> browser. Please
+-         <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+-         your experience and security.
+-       </p>
+-     <![endif]-->
+-  
+-     <!-- Add your site or application content here -->
+-     <!-- Add your site or application content here -->
+      <form class="frm weather">
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" />
+        <button type="submit">Get Weather</button>
+      </form>
+  
+      <section class="weather-display">
+        <h1>Weather Update</h1>
+-       <div class="details">Location: <span class="location"></span></div>
+-       <div class="details">Date: <span class="date"></span></div>
+-       <div class="details">Conditions: <span class="conditions"></span></div>
+-       <div class="details">Current Temp: <span class="temp"></span></div>
+-       <div class="details">Sunrise: <span class="sunrise"></span></div>
+-       <div class="details">Sunset: <span class="sunset"></span></div>
+-       <div class="forecast"></div>
++       <div class="details">Location: <span id="location"></span></div>
++       <div class="details">Date: <span id="date"></span></div>
++       <div class="details">Conditions: <span id="conditions"></span></div>
++       <div class="details">Current Temp: <span id="temp"></span></div>
++       <div class="details">Sunrise: <span id="sunrise"></span></div>
++       <div class="details">Sunset: <span id="sunset"></span></div>
++       <div id="forecast"></div>
+      </section>
+-  
+-     <script src="js/vendor/modernizr-3.7.1.min.js"></script>
+-     <script src="js/plugins.js"></script>
+-     <script src="js/main.js"></script>
+    </body>
+  </html>
+```
+
+### Overview/Requirements
+
+This app makes use of the free <a href="https://openweathermap.org/appid#signup" target="_blank">Open Weather Map API</a> to retrieve and display weather forecast information. In order to use this public API, you will need to sign up and get an **API Key**. We're going to use the *free* API endpoint (`api.openweathermap.org`) along with their <a href="https://openweathermap.org/api/geocoding-api" target="_blank">Geocoding API</a>.
+
+Our app will display the current weather for a particular city as well as the forecast weather.
+
+import previewCurrent from '../../../assets/white_dice_custom_html_css_javascript.png';
+import previewForecast from '../../../assets/white_dice_custom_html_css_javascript.png';
+
+<CardGrid>
+  <Card title="Current Weather" icon="sun">
+    <Image src={previewCurrent} alt="Current Weather" />
+  </Card>
+  <Card title="5 Day Forecast" icon="list-format">
+    <Image src={previewForecast} alt="5 Day Forecast" />    
+  </Card>
+</CardGrid>
+
+
+#### Design Choices
+
+Once again, we're going to follow some basic principles of **separation of concerns** by breaking our code into several parts.
+
+- [`js/main.js`](#mainjs) - This is the "entry point" where we're going to leverage our modules. By design, our code here will be brief. We'll import functions from other modules where all the "heavy lifting" is done.
+- [`js/api/open-weather.js`](#apiopen-weatherjs) - Here is where all of our API calls are made. At this point, we'll be interested in two things: Making the API calls and *transcribing* the results to some standard format that can be used elsewhere in our app. In larger applications, this might be thought of as our **Anti-corruption Layer**.
+- [`js/dom/forecast.js`](#domforecastjs) - This will hold a function that will generate the DOM content for an array of weather forecasts.
+- [`js/dom/weather.js`](#domweatherjs) - This will hold a function that will generate the DOM content for the current weather information.
+- [`js/ui/city-selection.js`](#city-selectionjs) - This will set up the event listener for the form input where the user can select the city.
+
+As we build out these JavaScript modules, we'll handle the modules that perform *exports* before we do the one that does the *imports* (`main.js`). This is a fairly natural way to start writing your code once you are clear about the design of your app.
+
+<FileTree>
+- js
+  - api
+    - open-weather.js
+  - dom
+    - forecast.js
+    - weather.js
+  - ui
+    - city-selection.js
+  - main.js
+</FileTree>
+
+#### Technical Considerations
+
+The API key that you will receive when signing up for Open Weather Map is something we will keep secret. While the tutorials from the previous day made use of <a href="" target="_blank">Parcel</a>, we're going to use the more modern <a href="" target="_blank">**Vite**</a>. This choice is largely due to the simplicity with which we can still use our API key within our ***demo*** client JavaScript code. *You should **never** expose API keys in client-facing JavaScript files for real-world - i.e.: **published** - applications.* But since we're just running this on our local computers, it should (hopefully) be safe.
+
+### Project Setup
+
+The project will be set up to use Vite as the build tool and development server. This choice is because of the built-in support of [`.env`](#env) files, where our secrets are stored.
+
+```ps
+pnpm init
+pnpm add -D vite
+```
+
+All that is needed to make use of Vite as our web server is to add a script for us to launch the site in developer mode.
+
+```diff lang="json" title="package.json"
+  {
+    "name": "weather-app",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+-     "test": "echo \"Error: no test specified\" && exit 1"
++     "dev": "vite"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "packageManager": "pnpm@10.16.1",
+    "devDependencies": {
+      "vite": "^7.1.5"
+    }
+  }
+```
+
+Run the site in the terminal (`pnpm dev`) to launch the web server. After the web server starts, you can type `o` + `[enter]` to open the site in the browser.
+
+#### .env
+
+To keep our API key secret (*you should **never** store it in your git history!*), we're going to use a `.env` file in the root of our application. Fortunately, if you're using Dan G's student workbook, its `.gitignore` already lists the various `.env.*` files as something git shouldn't track in our repository.
+
+Add the following variables to your `.env` file. The `VITE_` prefix on the variable names will allow them to be accessible to the JavaScript that runs on the client (i.e.: in the browser).
+
+```txt title=".env" {3}
+VITE_API_KEY=your-secret-key
+VITE_DEFAULT_CITY=Edmonton,ca
+# VITE_OPEN_WEATHER_API=paste-your-real-key-here
+```
+
+After you get your API key from Open Weather, replace the value on line 3 and remove the `# ` from the start so as to uncomment the line.
+
+----
+
+### JavaScript Code
+
+The Weather App demo is an opportunity to revisit some of the more advanced aspects of the JavaScript language. This demo is *not* written in a tutorial fashion. Rather, it's primarily a solution to the original specs of the demo. You are encouraged to read the code samples with an eye to grasping the JavaScript *syntax* and *grammar*, especially in relation to objects, destructuring syntax, and function parameters/arguments.
+
+#### api/open-weather.js
+
+We're interested in only two API endpoints: <a href="https://openweathermap.org/current" target="_blank">Current Weather</a> and <a href="https://openweathermap.org/forecast5" target="_blank">5 Day Forecasts</a>.
+
+This JavaScript module exports two functions: `getCurrentWeather` and `getForecast`. Note that <a href="https://jsdoc.app/about-getting-started" target="_blank">JSDoc comments</a> have been added only for those exported functions.
+
+```js title="js/api/open-weather.js" "getCurrentWeather" "getForecast"
+// 🚨 This is code running in the browser.
+// 🚨 Do not do this in real life.
+// 🚨 It will leak your secrets to anyone who views your website! ☠️
+// 🚨 Secrets should be used/processed on the SERVER only!!!
+const { VITE_OPEN_WEATHER_API } = import.meta.env;
+
+// We now return you to regular code....
+
+// Internal functions and constants to support the exported functions
+const BASE_API_URL = 'https://api.openweathermap.org/data/2.5/';
+const queryString = ({endpoint, city, country}) => 
+    `${endpoint}?q=${city},${country}&units=metric&appid=${VITE_OPEN_WEATHER_API}`;
+
+const fetchData = ({url, callback}) => {
+    fetch(url).then(handleResponse).then(callback);
+}
+
+const handleResponse = (response) => response.json();
+
+/**
+ * Gets the current weather.
+ * 
+ * @param {Object} options - Options for the API call.
+ * @param {string} options.city - The city name.
+ * @param {string} options.country - The country code.
+ * @param {Function} options.callback - Called with the Weather data.
+ * @returns {void} 
+ */
+export const getCurrentWeather = function({city, country, callback}) {
+    const WEATHER = BASE_API_URL + 'weather/';
+    const url = queryString({endpoint:WEATHER, city, country});
+    fetchData({url, callback});
+}
+
+/**
+ * Gets the 5-day forcast in 3-hour intervals.
+ * 
+ * @param {Object} options - Options for the API call.
+ * @param {string} options.city - The city name.
+ * @param {string} options.country - The country code.
+ * @param {Function} options.callback - Called with the Weather data.
+ * @returns {void} 
+ */
+export const getForecast = function({city, country, callback}) {
+    const FORECAST = BASE_API_URL + 'forecast/';
+    const url = queryString({endpoint:FORECAST, city, country});
+    fetchData({callback, url});
+}
+```
+
+
+#### dom/forecast.js
+
+This module is dedicated to displaying the 5-day forecast in the DOM.
+
+```js title="js/dom/forecast.js"
+/**
+ * Displays a weather forecast for a given location.
+ * @param {Object[]} data - The array of forecast weather objects.
+ * @param {Object} el - The reference to the display DOM element.
+ */
+export const displayForecast = (data, el) => {
+    console.log(data);
+    data = data.list;
+    let list = document.createElement('ul'),
+        currDate,
+        nextDate,
+        currItem;
+
+    data.forEach((item) => {
+        // destructuring for display variables
+        let {dt_txt: date} = item, {
+                temp_max: high,
+                temp_min: low
+            } = item.main, {main: cond} = item.weather[0];
+
+        nextDate = date.split(' ')[0];
+        if (currDate !== nextDate) {
+            currDate = nextDate;
+
+            // create a new item
+            currItem = document.createElement('li');
+            currItem
+                .classList
+                .add('forecast-item');
+            currItem.innerHTML = `<p>${currDate}</p>`;
+        }
+
+        currItem.innerHTML += `
+            <div class="forecast-detail">
+                <p><strong><span class="time">Time: ${date.substr(date.indexOf(' '))}</span></strong></p>
+                <ul>
+                    <li class="condition"> Condition: ${cond}</li>
+                    <li class="temp">Temp: ${ ((high + low) / 2)}</li>
+                </ul>
+            </div>
+        `;
+
+        list.append(currItem);
+    });
+
+    el.append(list);
+}
+```
+
+
+#### dom/weather.js
+
+This module is dedicated to displaying the current weather in the DOM.
+
+```js title="js/dom/weather.js"
+/**
+ * Displays the current weather for a given location.
+ * 
+ * The supplied data is expected to match the structure of the Weather endpoint for the Open Weather API.
+ * 
+ * The supplied HTMLElement is expected to contain children with the following IDs:
+ * 
+ * - location
+ * - date
+ * - conditions
+ * - temp
+ * - sunrise
+ * - sunset
+ * 
+ * @param {Object} data - The object of returned weather data.
+ * @param {HTMLElement} el - The reference to the display DOM element.
+ * @returns {void}
+ */
+export const displayWeather = (data, el) => {
+    // DOM insertion points
+    let loc = el.querySelector('#location'),
+        date = el.querySelector('#date'),
+        conditions = el.querySelector('#conditions'),
+        temp = el.querySelector('#temp'),
+        sunrise = el.querySelector('#sunrise'),
+        sunset = el.querySelector('#sunset');
+
+    // display the current weather data
+    loc.innerText = `${data.name}, ${data.sys.country}`;
+    date.innerText = new Date(+ data.dt * 1000);
+    conditions.innerText = data.weather[0].main;
+    temp.innerText = data.main.temp;
+    sunrise.innerText = new Date(+ data.sys.sunrise * 1000);
+    sunset.innerText = new Date(+ data.sys.sunset * 1000);
+}
+```
+
+
+#### city-selection.js
+
+We'll export a single function - `registerEventListener()` - that will wire up the form to an event listener that will respond to the user changing the city for the weather information. Be design, this part of our application is the one that needs to know about the API and DOM modules.
+
+```js title="js/ui/city-selection.js"
+import { getCurrentWeather, getForecast } from '../api/open-weather';
+import { displayForecast } from '../dom/forecast';
+import { displayWeather } from '../dom/weather';
+
+/**
+ * Registers an event listener for a form's submit event.
+ * @param {{form: HTMLFormElement, defaultLocation: string}} formElement A form with a text input for location.
+ * @returns {void}
+ */
+export const registerEventListener = function({form, defaultLocation, outputContainer}) {
+    // Set a default location for the weather input
+    form.elements.location.value = defaultLocation;
+
+    const handler = createHandler(createWeatherCallback(outputContainer), createForecastCallback(outputContainer));
+
+    form.addEventListener('submit', handler);
+}
+
+/**
+ * Generates a callback function that displays the weather data in the supplied container.
+ * 
+ * @param {HTMLElement} container - A DOM object with the requisite elements for displaying the current weather conditions. See {@link displayWeather}
+ * @returns {Function} A callback function to display the current weather.
+ */
+const createWeatherCallback = (container) => (data) => {
+    console.log(container);
+    displayWeather(data, container);
+}
+
+/**
+ * Generates a callback function that displays the 5-day forecast.
+ * 
+ * @param {HTMLElement} container A DOM object in which to display the 5-day forecast details
+ * @returns {Function} A callback function to display the 5-day forecast.
+ */
+const createForecastCallback = (container) => (data) => {
+    displayForecast(data, container.querySelector('#forecast'));
+}
+
+/**
+ * Generates an event handler for {@link SubmitEvent} events.
+ * 
+ * @param {Function} weatherCallback The callback function to use when calling {@link getCurrentWeather}
+ * @param {Function} forecastCallback The callback function to use when callint {@link getForecast}
+ * @returns {Function} An event handler for `<Form>` submit events.
+ */
+const createHandler = (weatherCallback, forecastCallback) => 
+    (/** @type {SubmitEvent} */submitEvent) => {
+        submitEvent.preventDefault();
+        let location = submitEvent.target.elements.location.value;
+        let [city, country] = location.split(','); // Destructuring an array
+
+        // fetch the weather data
+        getCurrentWeather({city, country, callback: weatherCallback});
+
+        // fetch the forecast data
+        getForecast({city, country, callback: forecastCallback});
+    }
+```
+
+
+
+#### main.js
+
+The `main.js` script is the "entry point" for our JavaScript app. It is purposefully made as simple as possible, as it's primary purpose is to "wire up" the HTML page with the rest of the application.
+
+```js title="js/main.js" wrap=true
+/**
+ * Simple weather display application for demonstrating AJAX for JSON and
+ * best practices for JavaScript development.  The script makes use of the
+ * OpenWeatherMap weather API.
+ */
+// 🚨 This is code running in the browser.
+// 🚨 Do not do this in real life.
+// 🚨 It will leak your secrets to anyone who views your website! ☠️
+// 🚨 Secrets should be used/processed on the SERVER only!!!
+const {VITE_DEFAULT_CITY, VITE_API_KEY } = import.meta.env;
+
+console.log('Default City:', VITE_DEFAULT_CITY);    // ✅ This is ok
+console.log('Fake API Key:', VITE_API_KEY);         // ❌ NOT OK!
+
+
+// ... we now return you to normal 
+import { registerEventListener } from './ui/city-selection';
+
+const form = document.querySelector('form');
+const outputContainer = document.querySelector('section');
+registerEventListener({form, outputContainer, defaultLocation: VITE_DEFAULT_CITY});
+
+```
