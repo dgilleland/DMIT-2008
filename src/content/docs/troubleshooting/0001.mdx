@@ -1,0 +1,38 @@
+---
+title: gyp Errors
+description: The first assignment for the course, and students are aready getting errors running `npm install`. They're feeling gypped.
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+
+So, students are doing their first assignment for the term. They have to get the backend server running. The code is all provided, so it *should* just be a matter of running `npm install` to kick things off.
+
+But, they get hit with an error, and it's miles long in its description.
+
+```ps title="Lines removed for brevity"
+PS C:\GH\2008\asgn-1\backend> npm install
+npm warn deprecated @npmcli/move-file@1.1.2: This functionality has been moved to @npmcli/fs    
+npm warn cleanup Failed to remove some directories [
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\GH\\2008\\asgn-1\\backend\\node_modules',
+....
+npm error gyp ERR! command "C:\\Program Files\\nodejs\\node.exe" "C:\\GH\\2008\\asgn-1\\backend\\node_modules\\node-gyp\\bin\\node-gyp.js" "rebuild"
+npm error gyp ERR! cwd C:\GH\2008\asgn-1\backend\node_modules\sqlite3
+npm error gyp ERR! node -v v22.19.0
+npm error gyp ERR! node-gyp -v v8.4.1
+npm error gyp ERR! not ok
+... 
+```
+
+## The Solution
+
+The clue to this error is in the parts near the end, with the lines that start with `npm error gyp ERR!`. It turns out that `node-gyp` ("gyp" stands for "generate your project") is having trouble (for whatever internal reason). Fortunately, the fix is really easy.
+
+Simply run the following in the terminal:
+
+```ps
+npm update
+```
+
+Now, when you try `npm install` once again, everything should run smooth. Whew!

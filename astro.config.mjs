@@ -33,6 +33,10 @@ export default defineConfig({
                   autogenerate: { directory: 'tutorials' },
               },
               {
+                  label: 'Troubleshooting',
+                  autogenerate: { directory: 'troubleshooting' },
+              },
+              {
                   label: 'Grokking',
                   items: [
                       // Each item here is one entry in the navigation menu.
