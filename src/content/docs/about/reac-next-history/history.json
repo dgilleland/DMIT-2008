@@ -1,0 +1,265 @@
+{
+  "timeline": [
+    {
+      "year": 2016,
+      "react": {
+        "version": "15.0–15.6",
+        "highlights": [
+          "Improved performance and smaller bundle size",
+          "Used Stack reconciler (pre-Fiber)",
+          "No Error Boundaries yet"
+        ]
+      },
+      "nextjs": null,
+      "notes": "Pre-Fiber React era; foundation for later architectural change"
+    },
+    {
+      "year": 2017,
+      "react": {
+        "version": "16.0",
+        "highlights": [
+          "Introduced Fiber architecture",
+          "Added Error Boundaries, Fragments, Portals",
+          "Allowed arrays to be returned from render"
+        ]
+      },
+      "nextjs": null,
+      "notes": "React rewrite enabled incremental and interruptible rendering"
+    },
+    {
+      "year": 2018,
+      "react": {
+        "version": "16.3–16.8",
+        "highlights": [
+          "New Context API, StrictMode, createRef",
+          "Hooks API added (useState, useEffect, etc.)"
+        ]
+      },
+      "nextjs": {
+        "version": "8.x",
+        "highlights": [
+          "Serverless target support",
+          "Dynamic routing in pages directory"
+        ]
+      },
+      "notes": "Hooks changed component state management; Next.js gained flexibility for deployments"
+    },
+    {
+      "year": 2019,
+      "react": {
+        "version": "16.9–16.13",
+        "highlights": [
+          "Deprecated unsafe lifecycle methods",
+          "Added Profiler API",
+          "Performance improvements"
+        ]
+      },
+      "nextjs": {
+        "version": "9.0–9.5",
+        "highlights": [
+          "Introduced API Routes (/pages/api)",
+          "Added Incremental Static Regeneration (ISR)",
+          "Built-in CSS/SASS Modules",
+          "Improved dynamic routing"
+        ]
+      },
+      "notes": "React Fiber matured; Next.js expanded into a hybrid static/SSR framework"
+    },
+    {
+      "year": 2020,
+      "react": {
+        "version": "17.0",
+        "highlights": [
+          "No new developer-facing features",
+          "Reworked event system (attached to root instead of document)",
+          "New JSX Transform (no need to import React)"
+        ]
+      },
+      "nextjs": {
+        "version": "10.0",
+        "highlights": [
+          "Image optimization via <Image />",
+          "Internationalized routing (i18n)",
+          "Improved static optimization and TypeScript support"
+        ]
+      },
+      "notes": "React 17 simplified upgrades; Next.js 10 improved developer experience"
+    },
+    {
+      "year": 2021,
+      "react": {
+        "version": "18-alpha",
+        "highlights": [
+          "Preview of Concurrent Mode",
+          "Introduced createRoot API"
+        ]
+      },
+      "nextjs": {
+        "version": "11.0–12.0",
+        "highlights": [
+          "Webpack 5 support by default",
+          "Rust-based SWC compiler for faster builds",
+          "Edge middleware introduced",
+          "Experimental React 18 features and ES modules support"
+        ]
+      },
+      "notes": "Next.js 12 aligned infrastructure with React 18; start of edge and streaming support"
+    },
+    {
+      "year": 2022,
+      "react": {
+        "version": "18.0",
+        "highlights": [
+          "Concurrent rendering (opt-in)",
+          "Automatic batching of state updates",
+          "useId, useTransition, useDeferredValue hooks",
+          "Improved Suspense and SSR streaming"
+        ]
+      },
+      "nextjs": {
+        "version": "13.0",
+        "highlights": [
+          "Introduced App Router (app/ directory)",
+          "React Server Components and streaming",
+          "Turbopack (alpha)",
+          "Reworked next/link and next/image"
+        ]
+      },
+      "notes": "New paradigm: concurrent + server-driven UI; major architecture change for Next.js"
+    },
+    {
+      "year": 2023,
+      "react": {
+        "version": "18.2",
+        "highlights": [
+          "Stabilized Suspense for data fetching",
+          "Minor internal optimizations"
+        ]
+      },
+      "nextjs": {
+        "version": "13.4–14.0",
+        "highlights": [
+          "App Router stable and default",
+          "Partial Pre-Rendering (PPR)",
+          "Server Actions (experimental)",
+          "New font optimization and memory improvements"
+        ]
+      },
+      "notes": "App Router became production-ready; SSR and RSC standardized"
+    },
+    {
+      "year": 2024,
+      "react": {
+        "version": "19.0",
+        "highlights": [
+          "Introduced Actions API for async state updates",
+          "Added useEffectEvent hook",
+          "React Compiler and View Transitions API"
+        ]
+      },
+      "nextjs": {
+        "version": "15.0",
+        "highlights": [
+          "Turbopack stable for production",
+          "Full React 19 support",
+          "Enhanced caching and edge runtime",
+          "Streamlined build adapters"
+        ]
+      },
+      "notes": "React 19 and Next.js 15 form a new compiler-driven ecosystem"
+    },
+    {
+      "year": 2025,
+      "react": {
+        "version": "19.2+",
+        "highlights": [
+          "React Compiler improvements",
+          "Optimized async transitions",
+          "Better RSC and streaming performance"
+        ]
+      },
+      "nextjs": {
+        "version": "16.0",
+        "highlights": [
+          "Cache Components model",
+          "Partial Pre-Rendering stable",
+          "Turbopack default bundler",
+          "Full React Compiler support",
+          "Faster navigation and hydration"
+        ]
+      },
+      "notes": "The new era: cache-driven rendering, instant navigation, fully streaming hybrid apps"
+    }
+  ],
+  "migration_guidance": [
+    {
+      "target": "React 15 → 16",
+      "steps": [
+        "Refactor lifecycle methods (componentWillMount/ReceiveProps)",
+        "Add Error Boundaries",
+        "Test new render behavior"
+      ]
+    },
+    {
+      "target": "React 16 → 17",
+      "steps": [
+        "Minimal changes",
+        "Verify event handlers and JSX Transform setup"
+      ]
+    },
+    {
+      "target": "React 17 → 18",
+      "steps": [
+        "Switch to createRoot API",
+        "Test Suspense and concurrent rendering",
+        "Update ReactDOM imports"
+      ]
+    },
+    {
+      "target": "React 18 → 19",
+      "steps": [
+        "Ensure dependencies support React Compiler",
+        "Adopt Actions for async updates",
+        "Check RSC and concurrent features compatibility"
+      ]
+    },
+    {
+      "target": "Next.js 9 → 10/11",
+      "steps": [
+        "Adopt new dynamic routing and i18n",
+        "Upgrade to Webpack 5"
+      ]
+    },
+    {
+      "target": "Next.js 11 → 12",
+      "steps": [
+        "Switch to SWC compiler",
+        "Test middleware functionality",
+        "Remove deprecated 'target' settings"
+      ]
+    },
+    {
+      "target": "Next.js 12 → 13",
+      "steps": [
+        "Migrate to App Router (optional)",
+        "Update next/link and next/image usage",
+        "Test React Server Components integration"
+      ]
+    },
+    {
+      "target": "Next.js 13 → 14",
+      "steps": [
+        "Remove next export",
+        "Adopt Server Actions and Partial Pre-Rendering"
+      ]
+    },
+    {
+      "target": "Next.js 14 → 15/16",
+      "steps": [
+        "Ensure React 19 compatibility",
+        "Adopt Turbopack and new caching APIs",
+        "Migrate any custom Webpack configs"
+      ]
+    }
+  ]
+}

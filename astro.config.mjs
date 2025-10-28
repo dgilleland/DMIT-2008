@@ -22,6 +22,7 @@ export default defineConfig({
                   items: [
                       // Each item here is one entry in the navigation menu.
                       { label: 'Start Here', slug: 'about/start-here' },
+                      { label: 'React/NextJS History', slug: 'about/react-next-history'}
                   ],
               },
               {
