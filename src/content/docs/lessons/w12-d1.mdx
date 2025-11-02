@@ -1,9 +1,6 @@
 ---
-title: Testing - Part 1 (W12-D1)
-description: SUMMARY
-sidebar:
-  hidden: true
-draft: true
+title: Week 10, Day 2
+description: Testing - Part 1 (W12-D1)
 ---
 
 {/* 
@@ -25,3 +22,50 @@ import cal from '@assets/undraw/undraw_spreadsheet_uj8z.svg'
     <Image src={cal} alt="Author TODO Items" class="float-end ml-3" width="150" />
     <LinkCard title="Back to Calendar" href="/DMIT-2008/lessons/77777" description="Nothing here? Check back with the in-class demo overview" />
 </Aside>
+
+<Aside title="Ahead of Schedule" type="note">
+   This topic was slated for the start of Week 12, but we are at the end of Week 10.
+
+   While it appears that we are "ahead", in fact we are losing a week due to *Fall Break*.
+</Aside>
+
+
+{/* 
+The following are AI-Generated notes from ChatGPT.
+ */}
+
+
+## React Testing Libraries
+
+Here's a summary of the purpose and role of each of those Node packages in React testing:
+
+| Package                       | Purpose                                                      | Role in React Testing                                                                                                                                         |
+| ----------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **jest**                      | A JavaScript testing framework developed by Facebook.        | Provides the core testing environment — runs tests, manages assertions, mocks modules, and reports results.                                                   |
+| **jest-environment-jsdom**    | A Jest environment that simulates a browser using **jsdom**. | Allows Jest tests to run React components as if they were in a browser (since Node.js doesn't have a DOM by default).                                         |
+| **@testing-library/react**    | A testing utility built for React components.                | Provides functions to render components and query their output in a way that mimics how users interact with the UI.                                           |
+| **@testing-library/jest-dom** | A companion library for Jest and Testing Library.            | Extends Jest's `expect` assertions with custom matchers (e.g. `toBeInTheDocument()`, `toHaveTextContent()`) to make DOM testing more readable and expressive. |
+
+---
+
+### Summary
+
+Together, these packages form a complete testing setup for React applications. **Jest** runs the tests and handles assertions, **jest-environment-jsdom** simulates a browser environment, **@testing-library/react** focuses on testing React components from the user's perspective, and **@testing-library/jest-dom** enhances test readability with intuitive DOM assertions.
+
+----
+
+## Mocking Fetch Calls
+
+Here's a summary explaining the purpose and role of additional Node packages in testing (particularly for React or frontend apps) that we lean on when we need to mock items such as `fetch()` calls:
+
+| Package                       | Purpose                                                     | Role in Testing                                                                                                                                  |
+| ----------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **msw** (Mock Service Worker) | A library for API mocking by intercepting network requests. | Simulates server responses in tests (and during development) without needing a real backend — useful for testing components that make API calls. |
+| **isomorphic-fetch**          | A universal (isomorphic) implementation of the Fetch API.   | Ensures `fetch()` is available in both Node (for tests) and browser environments — provides consistent HTTP request behavior.                    |
+| **undici**                    | A modern, high-performance HTTP client for Node.js.         | Often used by Jest or test setups to polyfill or replace the global `fetch()` function in Node for more accurate and efficient request handling. |
+
+---
+
+### Summary
+
+These packages enhance **network request testing** in React and JavaScript applications. **MSW** mocks APIs to isolate frontend logic from real servers, **isomorphic-fetch** ensures consistent fetch behavior across environments, and **undici** provides a fast, standards-compliant `fetch` implementation for Node. Together, they help create reliable, deterministic tests for components that depend on network interactions.
