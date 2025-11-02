@@ -1,9 +1,9 @@
 ---
-title: Pagination and Routing - Part 1 (W10-D1)
-description: SUMMARY
+title: Week 10, Day 1
+description: Server-Side Rendering and Routing
 sidebar:
-  hidden: true
-draft: true
+  hidden: false
+template: splash
 ---
 
 {/* 
@@ -12,8 +12,6 @@ draft: true
 
 https://dmit-2008.github.io/dmit2008/classes/week-10/day-1
 */}
-
-> ***Solution** to be revealed **in class** and posted here afterwards*
 
 
 import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
@@ -25,3 +23,196 @@ import cal from '@assets/undraw/undraw_spreadsheet_uj8z.svg'
     <Image src={cal} alt="Author TODO Items" class="float-end ml-3" width="150" />
     <LinkCard title="Back to Calendar" href="/DMIT-2008/lessons/77777" description="Nothing here? Check back with the in-class demo overview" />
 </Aside>
+
+> This class period will be **Topic I - Part 2** for **Nov 3** in your instructor's `Agenda.md`.
+>
+> ***Instructor Note:** Zoom to 125% and <kbd>F11</kbd> for FullScreen.
+
+We're going to take a look at how to "rehydrate" data in the client by **changing routes** and using the NextJS `getServerSideProps()` to reload the data on the backend.
+
+<Aside title="A side note on the project dependencies" type="note">
+  The demo we are running has two apps: one for the backend (`npm run server`) and one for the frontend (`npm run dev`). Here are the frontend dependencies. Notes on current versions are in parenthesis.
+
+  ```
+  dependencies:
+  + @emotion/react 11.14.0
+  + @emotion/styled 11.14.1
+  + @mui/icons-material 5.18.0 (7.3.4 is available)
+  + @mui/material 5.18.0 (7.3.4 is available)
+  + next 12.1.6 (15.5.6 is available)
+  + react 18.2.0 (19.2.0 is available)
+  + react-dom 18.2.0 (19.2.0 is available)
+
+  devDependencies:
+  + eslint 8.18.0 (9.38.0 is available) deprecated
+  + eslint-config-next 12.1.6 (16.0.0 is available)
+  ```
+</Aside>
+
+## Lesson Prep
+
+In the steps for this demo, we will be editing the `<Home>` component from the `pages/index.js`. There will be several edits, which we will perform in discrete steps.
+
+Because of the amount of code in this file, take a few moments to see where everything is, so that you can locate where in the entire file you will need to make changes in each step.
+
+When following along in class, be sure to **commit** after each step; use the bold text from the step description as your commit message.
+
+## Begin Editing...
+
+<Steps>
+1. **Define Server-Side processing**
+
+    ```diff lang="jsx" title="pages/index.js"
+      // ...keep code above ⬆️
+      import { getReviews, postReview } from '../utils/api/reviews.js'
+
+    + export async function getServerSideProps(context) {
+    +   const reviews = await getReviews();
+    +   // equivalent to .then() in promises, the syntax is just a bit different.
+    +   return {
+    +     props: {
+    +       reviews: reviews
+    +     }, // will be passed to the page component as props
+    +   };
+    + }
+
+    - export default function Home() {
+    + export default function Home(props) {
+    +   console.log("Home Props:", props); // Comment out when you are sure
+      // ...keep code below ⬇️
+    ```
+
+    You should see the data in the Browser Dev Tools' Console.
+
+1. **Switch to props for data instead of state**
+
+    ```diff lang="jsx" title="pages/index.js"
+      // ...keep code above ⬆️
+              <Box
+                  sx={{
+                    pt: 2,
+                    pb: 2,
+                  }}
+                >
+    -           {reviews.map((adaptation, index)=> {
+    +           {props.reviews.map((adaptation, index)=> {
+                  return <AdaptationReviewCard
+                      key={index}
+                      id={adaptation.id}
+                      deleteCallback={deleteReviewItem}
+                      rating={adaptation.rating}
+                      title={adaptation.title}
+                      comment={adaptation.comment}
+                    />
+                })}
+              </Box>
+
+      // ...keep code below ⬇️
+    ```
+
+    Confirm that it is rendering correctly. You may need to refresh (<kbd>Ctrl</kbd> <kbd>F5</kbd>) your page.
+
+1. **Clean up unused reliance on effect**
+
+    Either delete or comment out the lines of code indicated below.
+
+    ```diff lang="jsx" title="pages/index.js"
+      // ...keep code above ⬆️
+    -   // on the client side, our function will fetch
+    -   // all of our reviews on loading of the page.
+    -   useEffect(()=> {
+    -     loadAllReviews()
+    -   }, [])
+
+    -   // for debugging "reviews" purposes only
+    -   useEffect(()=> {
+    -     console.log(reviews)
+    -   }, [reviews])
+      // ...keep code below ⬇️
+    ```
+
+    ```diff lang="jsx" title="pages/index.js"
+      // ...keep code above ⬆️
+    -   const loadAllReviews = () => {
+    -     getReviews().then((data)=> {
+    -       setReviews(data)
+    -     })
+    -   }
+      // ...keep code below ⬇️
+    ```
+
+1. **Setup the router for refreshing data**
+
+    ```diff lang="jsx" title="pages/index.js"
+      // ...keep code above ⬆️
+    + import { useRouter } from 'next/router';
+      import { getReviews, postReview } from '../utils/api/reviews.js'
+
+      // ...keep code below ⬇️
+    ```
+
+    ```diff lang="jsx" title="pages/index.js"
+      // ...keep code above ⬆️
+      export default function Home(props) {
+        // console.log("Home Props:", props); // Comment out when you are sure
+    +   const router = useRouter();
+    +   const refreshData = () => {
+    +     router.replace(router.asPath);
+    +   }
+
+      // ...keep code below ⬇️
+    ```
+
+    Changing the route will be our way to trigger interaction with the server, and thus refreshing our data.
+
+1. **Trigger router on adding/deleting reviews**
+
+    ```diff lang="jsx" title="pages/index.js"
+      // ...keep code above ⬆️
+        const deleteReviewItem = (deleteReviewId) => {
+    -     let allReviews = reviews.filter((review)=> {
+    -       return review.id !== deleteReviewId
+    -     })
+    -     setReviews(allReviews)
+    +     refreshData();
+        }
+      // ...keep code below ⬇️
+    ```
+
+    ```diff lang="jsx" title="pages/index.js"
+      // ...keep code above ⬆️
+        const handleSubmit = (event) => {
+          event.preventDefault()
+          postReview({
+              title,
+              comment: comments,
+              rating
+            }).then((data)=> {
+    -         setReviews([data, ...reviews])
+    +         refreshData();
+            })
+        }
+      // ...keep code below ⬇️
+    ```
+
+1. **Remove unused state variables**
+
+    ```diff lang="jsx" title="pages/index.js"
+      // ...keep code above ⬆️
+    -   const [reviews, setReviews] = useState([])
+        const [title, setTitle] = useState("")
+        const [comments, setComments] = useState("")
+        const [rating, setRating] = useState(0)
+      // ...keep code below ⬇️
+    ```
+
+    The only remaining state variables are those that involve our form inputs.
+</Steps>
+
+## Conclusion
+
+With this example, we leveraged server-side processing () and routing () to keep some of the component's **"state awareness"** separate from the primary focus of the component, which is rendering a list of reviews and facilitating the adding and removing of reviews.
+
+In other words, we removed having to manage the ***persisted state*** (all the reviews on the back end) from our client-side code. **Persistence** is all handled in the back end. By use of "route-refreshing" and Server-Side Props, we've handling all that processing on the server.
+
+**Note:** This is not a perfect fit for all components and situations, but it does have its use cases.
