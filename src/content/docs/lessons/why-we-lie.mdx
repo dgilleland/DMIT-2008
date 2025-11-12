@@ -1,0 +1,77 @@
+---
+title: We Lied To You
+description: As instructors, we lie to you. All the time. Well, maybe not all the time. And maybe not always intentionally. But we do. Why is that?
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+
+As instructors, we lie to you. All the time. Well, maybe not all the time. And maybe not always intentionally. But we do. Why is that?
+
+<Aside type="danger" title="Incomplete Rants Ahead 🚦">
+    My buttons got pushed again. It all started with <a href="https://youtu.be/vxkbf5QMA2g?si=k35T_Fv1ViS3pb49" target="_blank">this video</a> by Theo.
+
+    So, what follows is a rant. And I want to refine it a bit more before I talk about it more.
+</Aside>
+
+## We Reach for the Quick-and-Dirty
+
+A lot of times, we want a simple example to get a single point across. It's hard to create these examples without having some *bad practices* slip in. Our samples are too often "Quick'n'Dirty".
+
+The problem with "Quick'n'Dirty" is that, after the "Quick" is done, the "Dirty" remains.
+
+You pick up bad practices (anti-patterns). Your focus wanders to the things around the key point we really want you to see, and you think "those things must go with it".
+
+Here's a good example. See this sample teaching functions?
+
+```js title="learn-functions.js"
+let tweet = "This is a message that should fit in a tweet. At least, I hope so.";
+
+tweetThis(tweet);
+
+// function declaration
+function tweetThis(tweet) {
+    if(tweet.length > 280) {
+        throw new Error("Too long!");
+    }
+    console.log(tweet); // 🕊️ All is good
+}
+```
+
+Do you see it? Maybe not, because someone finally pointed it out to you.
+
+The lie some believe is that the variable name for the *argument* needs to match the variable name for the *parameter*. That's simply not true. BUT, if all the examples you're shown follow that pattern, you might think it's necessary for it to work right.
+
+This is a trivial example, and it usually happens in your first programming course. But this same aspect of antipatterns creeping in appears in several other ways as well.
+
+Another example is when, in first-level programming courses, we instructors fixate too much on *primitive* data types and over-simplified variables. Sometimes we avoid talking about "Objects" - 😱 - because we think somehow that it will be too confusing for students. We put it off. But when we leave Objects and OOP until the end of the course, students can get the idea that A) it's not important, B) it's too hard, and/or C) working with the primitive variables is the normal/best way to go. All of these are so far from the truth. In fact, this antipatter has a name: <a href="https://refactoring.guru/smells/primitive-obsession" target="_blank">**Primitive Obsession**</a>.
+
+## We Don't Know Better
+
+Being a teacher is hard. Schools rarely budget properly for curriculum development or for professional development for staff. And in the world of Computer Programming, our curriculum is changing all the time. It's hard to keep up (unless your obsessed). Teachers have families. They have interests outside of school. They have a *life*! (Or so I'm told - I don't really know myself....)
+
+My experience has taught me that if you want a high-quality course in post-secondary, you should invest 10 hours of development time (or more) for every hour of class time. So, for a 90-hour course (15 weeks, 6 hrs/wk), that means a 900-hour investment to *build* the quality course. That's about 50% of a year's work for one individual!!! Schools usually budget for only 10% of that.
+
+Most instructors are tasked with *teaching*, not curriculum development. And most schools are content to live of the generosity of enthusiastic teachers who make all the resources in their off hours. Teachers don't want to look foolish in front of their classes. Sometimes we opt for solutions that are "easy" or "affordable". The rare instructor goes the extra (10) miles. And they share what they learn (hopefully). They make the investment.
+
+But not all instructors can afford to make those investments. So, we sometimes teach to the lowest common denominator. And our curriculums become weak. Sometimes, they're no better than the free tutorials you can find on the internet!
+
+When you start to fall behind the current state of technology, it's hard to get back up to speed. We can do it in fits and spurts. And let's face it: **It's impossible to know *Everything*!!** But what the student's don't know won't hurt us. 😉
+
+## We Revere Our Mentors
+
+It's not unusual to teach in the way we ourselves have been taught. We gravitate to our own learning styles in the way we teach. And we tend to think that the "fundamentals" we've been taught by the people we admire are indeed the fundamentals we should be passing on to our students.
+
+We don't always think for ourselves. We don't always question our beliefs. Sometimes, we lose the love of learning, and just decide to coast. 😢
+
+[Author TODO: Clean this up a bit...]
+
+## ***I*** Lied To You
+
+I'm not immune. And sometimes I lie to you on purpose. Well, actually, I call it *"Incremental Learning"*. It's where I tell you a shallow version of the truth so that you don't get hung up on the details.
+
+But that's not the only times I lie to you. Sometimes I think I know the truth. And when I (hopefully) find out I'm wrong, I try not to repeat the lies to the next crop of students.
+
+This is the first time I'm teaching React (Sep-Dec, 2025). I know enough to teach it. Enough to be dangerous. But it's videos like the one I mention in the aside above that make me realize the bad advice I've given. And I'm sorry. I hope I learn from my mistakes. I hope you learn from my mistakes too. The lesson to learn is not "Don't trust your instructors". The lesson is, "We're all just human".
+
+So, in the end, be teachable. And learn from the mistakes of others - you won't live long enough to make them all yourself!
