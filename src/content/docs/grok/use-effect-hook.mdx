@@ -1,0 +1,33 @@
+---
+title: useEffect Wisely
+description: Principles to follow when using React's useEffect hook.
+draft: true
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+
+
+- `useEffect()` takes two arguments:
+    - A callback to run. This callback can return a function to call when the component unmounts??
+    - A "dependency array"
+
+> ## Sepcifying reactive dependencies
+>
+> Notice that you can't "shoose" the dependencies of your Effect. Every <a href="" target="_blank">reactive value</a> used by your Effect's code must declared as a dependency. Your Effect's dependency list is determined by the surrounding code:
+>
+> 
+> ```js title="Reactive Dependencies Example" "This is a reactive value" "roomId" "serverUrl"
+> function ChatRoom({ roomId }) { // This is a reactive value
+>     const [serverUrl, setServerUlr] = useState('https://localhost:1234'); // This is a reactive value too
+> 
+>     useEffect(() => {
+>         const connection = createConnection(serverUrl, roomId); // This Effect read these reactive values
+>         connection.connect();
+>         return () => connection.disconnect();
+>     }, [serverUrl, roomId]); // ✅ So you must specify them as dependencies of your Effect
+> }
+> ```
+>
+> **Reactive values include props and all variables and functions declared directly inside of your component.**
+
