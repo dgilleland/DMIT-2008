@@ -1,0 +1,286 @@
+---
+title: Using Context for Authentication
+description: The last (official) demo of the course.
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
+import cal from '@assets/undraw/undraw_spreadsheet_uj8z.svg'
+
+<Image src={cal} alt="Author TODO Items" class="float-end ml-3" width="150" />
+
+Authentication is all about identifying ***who*** the user is. We're going to use a "pretend" authentication system as our "back-end".
+
+
+
+<Steps>
+1. Create an `AuthProvider.js` component under `components/state/`. We'll put in the basic structure of a component that is **providing context** for its children.
+
+    ```js title="components/state/AuthProvider.js"
+    // ~/components/state/AuthProvider.js
+
+    import { useState, useContext, createContext } from 'react';
+    import { login } from '@/utils/api/auth';
+
+    export const AuthenticationContext = createContext({});
+
+    // "custom hook" with default argument as a "convenience function" for consumers
+    export const useAuth = () => {
+        const context = useContext(AuthenticationContext);
+        if(!context) {
+            throw new Error(`useAuth must be used with a AuthProvider component`);
+        }
+        return context;
+    }
+
+    export default function AuthProvider({children}) {
+
+        return <AuthenticationContext.Provider 
+            value={ {} }>
+            {children}
+        </AuthenticationContext.Provider>
+    }
+    ```
+
+1. The state and behaviour of our component is centered around *authentication*. Add the following to the `AuthProvider.js`.
+
+    ```diff lang="jsx" title="components/state/AuthProvider.js"
+      export default function AuthProvider({children}) {
+    +     // token - this contains the "access token" that our API will use for authenticating rest API requests
+    +     const [token, setToken] = useState("");
+    +     // user - details on the user
+    +     const [user, setUser] = useState();
+    +     // isAuthenticated - just a simple boolean
+    +     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    +     // make the api request to sign in and then define the state.
+    + 
+    +     const signIn = ({email, password}) => {
+    +         return login({email, password}).then((loginData) => {
+    +             /*
+    +                 Note: This is going to contain both the access token and the user.
+    +                 This is not always the case with a login endpoint.
+    +                 For the response, please refer to
+    +                 https://www.npmjs.com/package/json-server-auth
+    +             */
+    +         setIsAuthenticated(true);
+    +         setToken(loginData.accessToken);
+    +         setUser(loginData.user);
+    +         });
+    +     }
+    + 
+    +     const signOut = () => {
+    +         setIsAuthenticated(false);
+    +         setUser();
+    +         setToken("");
+    +     }
+
+          return <AuthenticationContext.Provider 
+              value={ {} }>
+              {children}
+          </AuthenticationContext.Provider>
+      }
+    ```
+
+1. Specify the object properties that will be available/exposed through the `AuthenticationContext`.
+
+    ```diff lang="jsx" title="components/state/AuthProvider.js"
+          return <AuthenticationContext.Provider 
+    -         value={ {} }>
+    +         value={ {token, user, isAuthenticated, signIn, signOut} }>
+              {children}
+          </AuthenticationContext.Provider>
+    ```
+
+1. Add a "convenience hook" for consumers of our authentication provider context.
+
+    ```diff lang="jsx" title="components/state/AuthProvider.js"
+      import { useState, useContext, createContext } from 'react';
+      import { login } from '@/utils/api/auth';
+      export const AuthenticationContext = createContext({});
+    
+    + // "custom hook" with default argument as a "convenience function" for consumers
+    + export const useAuth = () => {
+    +     const context = useContext(AuthenticationContext);
+    +     if(!context) {
+    +         throw new Error(`useAuth must be used with a AuthProvider component`);
+    +     }
+    +     return context;
+    + }
+    ```
+
+1. We now have **two context providers** in the application - one for authentication and one for notification (based on the what we created/explored in the previous demo). Since they are effectively being used in "tandom" at the top of our component heirarchy, let's create a *convenience wrapper*.
+
+    ```jsx title="components/state/AppProviders.js"
+    // ~/components/state/AppProviders.js
+    import AppNotification from "./AppNotification";
+    import AuthProvider from "./AuthProvider";
+
+    export default function AppProviders({children}) {
+        return <AppNotification>
+            <AuthProvider>
+                {children}
+            </AuthProvider>
+        </AppNotification>
+    }
+    ```
+
+1. We will apply the context providers to the whole application.
+
+    ```diff lang="jsx" title="pages/_app.js"
+      import '@/styles/globals.css';
+    + import AppProviders from '@/components/state/AppProviders';
+    
+      export default function App({ Component, pageProps }) {
+    -   return <Component {...pageProps} />
+    +   return <AppProviders>
+    +     <Component {...pageProps} />
+    +   </AppProviders> 
+    ```
+
+1. It's time to consume our authentication provider. Let's complete the log in functionality of our `LoginForm.js`.
+
+    ```diff lang="jsx" title="components/LoginForm.js"
+    + import { useAuth } from './state/AuthProvider';
+    + import { useNotification } from './state/AppNotification';
+      
+      export default function LoginForm(){
+        const [email, setEmail] = useState("")
+        const [password, setPassword] = useState("")
+        const router = useRouter()
+      
+        /* import the hook here */
+    +   const { signIn } = useAuth();
+    +   const { showNotification } = useNotification();
+      
+        const handleLogin = (event)=> {
+          event.preventDefault()
+          /* make the sign in request here. */
+    +     signIn({email, password}).then(() => {
+    +       showNotification({ message: "Login successful", severity: "success" });
+    +       router.push('/dashboard/'); // forward the user to the dashboard page
+    +     }).catch((error) => {
+    +       showNotification({ message: "Login failed", severity: "error" });
+    +     });
+        }
+      
+        return <Box component="form" noValidate sx={{ mt: 1 }}
+    ```
+
+1. Now that users can log in, let's provide a "Log Out" capability on the `NavBar.js`. First, we'll set up our state and event handler.
+
+    ```diff lang="jsx" title="components/NavBar.js"
+    + import { useAuth } from './state/AuthProvider';
+    + import { useNotification } from './state/AppNotification';
+      
+      export default function NavBar(props) {
+        const router = useRouter()
+        /* import isAuthenticated and signOut context here. */ 
+    +   const { isAuthenticated, signOut } = useAuth();
+    +   const { showNotification } = useNotification();
+      
+    +   const handleSignOut = () => {
+    +     signOut();
+    +     showNotification({ message: "Signed out successfully", severity: "success" });
+    +   }
+      
+    ```
+
+1. Next, we'll make the parts of our `<NavBar>` conditionally rendered based on the authentication state. There are some links in the Nav Bar that are commented out. We want to include them, but only show them if the user is authenticated. If the user is *not* authenticated, then they should only see the Login link.
+
+    ```diff lang="jsx" title="components/NavBar.js"
+        return <AppBar position="static" sx={{marginBottom: "1rem"}}>
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link href="/" >
+                App State Example
+              </Link>
+            </Typography>
+    +       { !isAuthenticated ? 
+             <Typography variant="h6" component="div" >
+                <Link href="/login/">
+                  Login
+                </Link>
+              </Typography> 
+    -         {/*
+    -         
+    -         When user is authenticated you should hide the login and see 
+    -         
+    -         <>
+    +        :   
+    +           <>
+                <Typography variant="h6" component="div" sx={{pr: 1}}>
+                  <Link href="/dashboard/">
+                    Dashboard
+                  </Link>
+                </Typography> 
+                <Typography
+    +           <Typography onClick={() => { handleSignOut() }}
+                  variant="h6"
+                  component="div" >
+                  Sign out
+                </Typography> 
+    -         </>
+    -         
+    -         */}
+    +         </>        
+    +       }
+      
+          </Toolbar>
+        </AppBar>
+    ```
+
+1. We can improve our Authentication Provider by allowing some support for *authorization* as well. We'll begin by allowing the consumers of our Authentication Provider to indicate if the page they are on is "protected" (meaning, they won't be *authorized* unless they are *authenticated*). If it is a "protected" page and they are not allowed in, we will re-direct them to the home page.
+
+    ```diff lang="jsx" title="components/state/AuthProvider.js"
+    - import { useState, useContext, createContext } from 'react';
+    + import { useState, useContext, createContext, useEffect } from 'react';
+    + import { useRouter } from 'next/router';
+      import { login } from '@/utils/api/auth';
+      
+      export const AuthenticationContext = createContext({});
+      
+      // "custom hook" with default argument as a "convenience function" for consumers
+    - export const useAuth = () => {
+    + export const useAuth = (options = {protectedPage: false}) => {
+          const context = useContext(AuthenticationContext);
+          if(!context) {
+              throw new Error(`useAuth must be used with a AuthProvider component`);
+          }
+    +     const router = useRouter();
+    +     useEffect(() => {
+    +         // check if the user is authenticated and if it's a protected page
+    +         if (!context.isAuthenticated && options.protectedPage) {
+    +             // route the user to the home page (which isn't protected)
+    +             router.push("/");
+    +         }
+    +     }, [context.isAuthenticated]);
+          return context;
+      }
+    ```
+
+1. To demonstrate authorization along with authentication, we'll use the Authentication Provider in our Dashboard page. 
+
+    ```diff lang="jsx" title="pages/dashboard.js"
+      import Navbar from '@/components/Navbar'
+      
+    + import { useAuth } from '@/components/state/AuthProvider';
+      
+      export default function Dashboard() {
+        /* import the user reroute to home.
+        This should be a protected page.
+        */
+    +   const { user } = useAuth({protectedPage: true});
+    ```
+    
+    ```diff lang="jsx" title="pages/dashboard.js"
+                <Typography component="h1" variant="h5">
+    -             Welcome (USERNAME HERE)!
+    +             Welcome {user?.firstname}!
+                </Typography>
+                <Typography component="h2" variant="h5">
+                  This is your dashboard
+    ```
+
+</Steps>
+
