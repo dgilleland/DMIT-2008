@@ -6,7 +6,7 @@ interface Props {
     text: string;
 }
 
-const { href, text } = Astro.props;
+const { href, text }:Props = Astro.props;
 const docFolders = ['/grok/', '/lessons/', '/reference/', '/tutorials/'];
 let link = href;
 let parts = href.split('/').filter((x:string) => x !== '');

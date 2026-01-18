@@ -5,6 +5,7 @@ sidebar:
   label: Week 2, Day 1
 ---
 
+import InClass from '../../../components/InClass.astro';
 import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
 import { Image } from 'astro:assets';
 import todo from '../../../assets/undraw/undraw_under-construction_c2y1.svg';
@@ -25,6 +26,8 @@ In this class we will explore the first two language review demos in your workbo
 ----
 
 ## What You Remember
+
+<InClass term="Jan 2026" done={true} plan='in-class' />
 
 We begin be reviewing the HTML for a simple web page. The relevant portions are highlighted below.
 
@@ -158,6 +161,8 @@ Take this review a step farther. Define a function that will use the `document.c
 ----
 
 ## Astronauts
+
+<InClass term="Jan 2026" done={false} plan="homework" />
 
 Data is a core aspect of any and all websites, whether that data is simple hard-coded content (text, images, etc.) or information that is pulled from some API. In this demo, we explore <a href="https://lldev.thespacedevs.com/2.2.0" target="_blank">The Space Devs</a> public API to retrieve information about astronauts. Specifically, we'll be using the **Launch Library API 2**. The starter kit's `README.md` file contains a brief outline of the steps to follow.
 
