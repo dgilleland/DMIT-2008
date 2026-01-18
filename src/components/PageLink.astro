@@ -9,7 +9,7 @@ interface Props {
 const { href, text } = Astro.props;
 const docFolders = ['/grok/', '/lessons/', '/reference/', '/tutorials/'];
 let link = href;
-let parts = href.split('/').filter(x => x !== '');
+let parts = href.split('/').filter((x:string) => x !== '');
 switch (parts.length) {
     case 1:
         link = `/${['DMIT-2008', 'lessons', ...parts].join('/')}/`;
