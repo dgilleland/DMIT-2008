@@ -1,0 +1,41 @@
+---
+title: Sharing State Among React Components
+description: SUMMARY
+sidebar:
+  label: Sharing State
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+
+import beforeSharing from './00350/before-sharing.svg';
+import afterSharing from './00350/after-sharing.svg';
+
+When it comes to sharing data (*state*) between components, the traditional React approach to this is to **Lift State Up** and **Send Props Down**.
+
+<Image src={beforeSharing} alt="Before Sharing State" class="float-right ml-3 w-72" />
+
+Imagine you have two components inside some container.
+
+- One renders a tree-view of a folder structure. 
+- The other renders a list of files.
+
+Now imagine that you want critical information to be shared/communicated between the two. Perhaps your intent is for the list of files to be the files of some folder selected in the other component. How would you share that information? One simple approach is to move (*lift*) the state from the children and put it in the parent. Here's the steps in a nutshell.
+
+<Steps>
+1. Identify what state needs to be shared among the components. It might be all the state, or only part of the state.
+1. Move the *storage* of the state from the child(ren) to the parent.
+1. Pass the state from the parent to the child(ren) via *props*. 
+</Steps>
+
+The final result is 
+
+| Before Sharing | After Sharing |
+|:--------------:|:-------------:|
+| <Image src={beforeSharing} alt="Before Sharing State" /> | <Image src={afterSharing} alt="After Sharing State" /> |
+
+Note that this is not the only way to share state among components. But it's been a common enough pattern that the process is documented in detail on React's website.
+
+<LinkButton href="https://react.dev/learn/sharing-state-between-components" target="_blank" variant="primary" icon="external">
+  See the official React docs on **Sharing State**
+</LinkButton>
